@@ -1,5 +1,11 @@
 from flask import Flask, render_template, request
 from academic_engine import analyze_student
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter
+from flask import send_file
+import io
 
 app = Flask(__name__)
 
@@ -22,6 +28,36 @@ def analyze():
     result = analyze_student(input_data)
     
     return render_template("result.html", result=result)
+@app.route("/download_report", methods=["POST"])
+def download_report():
+
+    result = analyze_student(request.form)
+
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=letter)
+    styles = getSampleStyleSheet()
+    elements = []
+
+    elements.append(Paragraph("Academic Diagnostic Report", styles["Title"]))
+    elements.append(Spacer(1, 20))
+
+    elements.append(Paragraph(f"Current Effectiveness: {result['Simulation']['Original']}", styles["Normal"]))
+    elements.append(Paragraph(f"Projected Effectiveness: {result['Simulation']['Projected']}", styles["Normal"]))
+    elements.append(Paragraph(f"Improvement %: {result['Simulation']['Improvement_Percent']}", styles["Normal"]))
+    elements.append(Paragraph(f"Risk Score: {result['Risk_Score']}%", styles["Normal"]))
+    elements.append(Paragraph(f"Strategy: {result['Strategy']}", styles["Normal"]))
+    elements.append(Spacer(1, 20))
+
+    elements.append(Paragraph("AI Advisory Summary:", styles["Heading2"]))
+    elements.append(Paragraph(result["AI_Summary"], styles["Normal"]))
+
+    doc.build(elements)
+    buffer.seek(0)
+
+    return send_file(buffer,
+                     as_attachment=True,
+                     download_name="Academic_Report.pdf",
+                     mimetype="application/pdf")
 
 import os
 
