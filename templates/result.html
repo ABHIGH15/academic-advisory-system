@@ -2,55 +2,54 @@
 <html>
 <head>
     <title>Academic Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body>
+<body class="soft-report-bg">
+<div class="container soft-glass">
 
-<div class="container">
+    <h1 class="soft-title">📊 Academic Diagnostic Report</h1>
 
-    <h1>📊 Academic Diagnostic Report</h1>
-
-    <div class="card">
+    <div class="card soft-card">
         <h2>Current Effectiveness</h2>
-        <div class="progress-bar">
-            <div class="progress" style="width: {{ result.Simulation.Original }}%;">
+        <div class="progress-bar soft-progress">
+            <div class="progress soft-fill-progress" style="width: {{ result.Simulation.Original }}%;">
                 {{ result.Simulation.Original }}
             </div>
         </div>
     </div>
 
-    <div class="card">
+    <div class="card soft-card">
         <h2>Projected Effectiveness</h2>
-        <div class="progress-bar blue">
-            <div class="progress" style="width: {{ result.Simulation.Projected }}%;">
+        <div class="progress-bar soft-progress blue-soft">
+            <div class="progress soft-blue-progress" style="width: {{ result.Simulation.Projected }}%;">
                 {{ result.Simulation.Projected }}
             </div>
         </div>
-        <p class="improvement">Improvement: +{{ result.Simulation.Improvement_Percent }}%</p>
+        <p class="improvement soft-gain">Improvement: +{{ result.Simulation.Improvement_Percent }}%</p>
     </div>
 
-    <div class="card">
+    <div class="card soft-card">
         <h2>Recommended Strategy</h2>
-
         {% if "Reinforcement" in result.Strategy %}
-            <span class="badge red">{{ result.Strategy }}</span>
+            <span class="badge red soft-badge">{{ result.Strategy }}</span>
         {% elif "Balanced" in result.Strategy %}
-            <span class="badge orange">{{ result.Strategy }}</span>
+            <span class="badge orange soft-badge">{{ result.Strategy }}</span>
         {% else %}
-            <span class="badge green">{{ result.Strategy }}</span>
+            <span class="badge green soft-badge">{{ result.Strategy }}</span>
         {% endif %}
     </div>
 
-    <div class="card">
+    <div class="card soft-card">
         <h2>Cluster Profile</h2>
         <p>Cluster ID: {{ result.Cluster }}</p>
     </div>
 
     <div class="center">
-        <a href="/" class="btn-secondary">Analyze Another Student</a>
+        <a href="/" class="btn-secondary soft-secondary">Analyze Another Student</a>
     </div>
 
 </div>
-
 </body>
 </html>
