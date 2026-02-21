@@ -3,9 +3,13 @@ import numpy as np
 import pandas as pd
 
 # Load models
-ann_model = joblib.load("models/ann_model.pkl")
-scaler = joblib.load("models/scaler.pkl")
-cluster_model = joblib.load("models/cluster_model.pkl")
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+ann_model = joblib.load(os.path.join(BASE_DIR, "models/ann_model.pkl"))
+scaler = joblib.load(os.path.join(BASE_DIR, "models/scaler.pkl"))
+cluster_model = joblib.load(os.path.join(BASE_DIR, "models/cluster_model.pkl"))
 
 feature_columns = [
     "Attendance_Rate",
