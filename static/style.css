@@ -396,3 +396,6 @@ p {
     .soft-title { font-size: 2.3rem; }
     .soft-label { font-size: 1.05rem; }
 }
+canvas {
+    margin-top: 20px;
+}
