@@ -31,7 +31,18 @@ def analyze():
 @app.route("/download_report", methods=["POST"])
 def download_report():
 
-    result = analyze_student(request.form)
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+    from reportlab.lib.styles import getSampleStyleSheet
+    from reportlab.lib.pagesizes import letter
+    import io
+
+    # Get values directly from form
+    original = request.form.get("original")
+    projected = request.form.get("projected")
+    improvement = request.form.get("improvement")
+    risk = request.form.get("risk")
+    strategy = request.form.get("strategy")
+    summary = request.form.get("summary")
 
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=letter)
@@ -41,24 +52,25 @@ def download_report():
     elements.append(Paragraph("Academic Diagnostic Report", styles["Title"]))
     elements.append(Spacer(1, 20))
 
-    elements.append(Paragraph(f"Current Effectiveness: {result['Simulation']['Original']}", styles["Normal"]))
-    elements.append(Paragraph(f"Projected Effectiveness: {result['Simulation']['Projected']}", styles["Normal"]))
-    elements.append(Paragraph(f"Improvement %: {result['Simulation']['Improvement_Percent']}", styles["Normal"]))
-    elements.append(Paragraph(f"Risk Score: {result['Risk_Score']}%", styles["Normal"]))
-    elements.append(Paragraph(f"Strategy: {result['Strategy']}", styles["Normal"]))
+    elements.append(Paragraph(f"Current Effectiveness: {original}", styles["Normal"]))
+    elements.append(Paragraph(f"Projected Effectiveness: {projected}", styles["Normal"]))
+    elements.append(Paragraph(f"Improvement %: {improvement}", styles["Normal"]))
+    elements.append(Paragraph(f"Risk Score: {risk}%", styles["Normal"]))
+    elements.append(Paragraph(f"Strategy: {strategy}", styles["Normal"]))
     elements.append(Spacer(1, 20))
 
     elements.append(Paragraph("AI Advisory Summary:", styles["Heading2"]))
-    elements.append(Paragraph(result["AI_Summary"], styles["Normal"]))
+    elements.append(Paragraph(summary, styles["Normal"]))
 
     doc.build(elements)
     buffer.seek(0)
 
-    return send_file(buffer,
-                     as_attachment=True,
-                     download_name="Academic_Report.pdf",
-                     mimetype="application/pdf")
-
+    return send_file(
+        buffer,
+        as_attachment=True,
+        download_name="Academic_Report.pdf",
+        mimetype="application/pdf"
+    )
 import os
 
 if __name__ == "__main__":
