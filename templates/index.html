@@ -2,18 +2,37 @@
 <html>
 <head>
     <title>Academic Advisory System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h2>Student Academic Input</h2>
-    <form action="/analyze" method="post">
-        Attendance: <input name="attendance"><br>
-        Concept Clarity: <input name="concept"><br>
-        Practice Frequency: <input name="practice"><br>
-        Internal Assessment: <input name="internal"><br>
-        Assignment Quality: <input name="assignment"><br>
-        Time Management: <input name="time"><br>
-        Learning Consistency: <input name="consistency"><br>
-        <button type="submit">Analyze</button>
+
+<div class="container">
+    <h1>🎓 Academic Intelligence System</h1>
+    <p class="subtitle">Enter your academic indicators to receive a personalized advisory report</p>
+
+    <form action="/analyze" method="post" class="form-card">
+
+        {% set fields = [
+            ("attendance", "Attendance Rate"),
+            ("concept", "Concept Clarity"),
+            ("practice", "Practice Frequency"),
+            ("internal", "Internal Assessment"),
+            ("assignment", "Assignment Quality"),
+            ("time", "Time Management"),
+            ("consistency", "Learning Consistency")
+        ] %}
+
+        {% for name, label in fields %}
+        <div class="slider-group">
+            <label>{{ label }}: <span id="{{name}}Val">50</span></label>
+            <input type="range" name="{{name}}" min="0" max="100" value="50"
+                   oninput="{{name}}Val.innerText = this.value">
+        </div>
+        {% endfor %}
+
+        <button type="submit" class="btn-primary">Analyze Performance</button>
     </form>
+</div>
+
 </body>
 </html>
