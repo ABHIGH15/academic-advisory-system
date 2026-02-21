@@ -1,1 +1,120 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    margin: 0;
+    padding: 0;
+}
 
+.container {
+    width: 90%;
+    max-width: 800px;
+    margin: 40px auto;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.subtitle {
+    text-align: center;
+    color: #777;
+    margin-bottom: 30px;
+}
+
+.form-card, .card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-bottom: 25px;
+}
+
+.slider-group {
+    margin-bottom: 20px;
+}
+
+.slider-group label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="range"] {
+    width: 100%;
+}
+
+.btn-primary {
+    background: #007bff;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+}
+
+.btn-primary:hover {
+    background: #0056b3;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+.btn-secondary:hover {
+    background: #545b62;
+}
+
+.progress-bar {
+    background: #e9ecef;
+    border-radius: 20px;
+    overflow: hidden;
+    height: 30px;
+}
+
+.progress {
+    background: #28a745;
+    height: 100%;
+    text-align: center;
+    color: white;
+    line-height: 30px;
+    font-weight: bold;
+}
+
+.blue .progress {
+    background: #007bff;
+}
+
+.badge {
+    padding: 8px 15px;
+    border-radius: 20px;
+    color: white;
+    font-weight: bold;
+}
+
+.red {
+    background: #dc3545;
+}
+
+.orange {
+    background: #fd7e14;
+}
+
+.green {
+    background: #28a745;
+}
+
+.improvement {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.center {
+    text-align: center;
+}
