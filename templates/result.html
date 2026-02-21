@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Academic Report</title>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
@@ -13,13 +20,15 @@
 
     <h1 class="soft-title">📊 Academic Diagnostic Report</h1>
 
-    <!-- ================= EFFECTIVENESS SECTION ================= -->
+    <!-- ================= EFFECTIVENESS ================= -->
 
     <div class="card soft-card">
         <h2>Current Effectiveness</h2>
         <div class="progress-bar soft-progress">
-            <div class="progress soft-fill-progress" style="width: {{ result.Simulation.Original }}%;">
-                {{ result.Simulation.Original }}
+            <div class="progress soft-fill-progress"
+                 style="width: {{ result.Simulation.Original }}%;">
+                <span class="counter"
+                      data-target="{{ result.Simulation.Original }}">0</span>
             </div>
         </div>
     </div>
@@ -27,16 +36,21 @@
     <div class="card soft-card">
         <h2>Projected Effectiveness</h2>
         <div class="progress-bar soft-progress blue-soft">
-            <div class="progress soft-blue-progress" style="width: {{ result.Simulation.Projected }}%;">
-                {{ result.Simulation.Projected }}
+            <div class="progress soft-blue-progress"
+                 style="width: {{ result.Simulation.Projected }}%;">
+                <span class="counter"
+                      data-target="{{ result.Simulation.Projected }}">0</span>
             </div>
         </div>
+
         <p class="improvement soft-gain">
-            Improvement Potential: +{{ result.Simulation.Improvement_Percent }}%
+            Improvement Potential:
+            +<span class="counter"
+                   data-target="{{ result.Simulation.Improvement_Percent }}">0</span>%
         </p>
     </div>
 
-    <!-- ================= STRATEGY SECTION ================= -->
+    <!-- ================= STRATEGY ================= -->
 
     <div class="card soft-card">
         <h2>🎯 Recommended Strategy</h2>
@@ -52,37 +66,39 @@
 
     <!-- ================= RISK GAUGE ================= -->
 
-<div class="card soft-card">
-    <h2>⚡ Academic Risk Indicator</h2>
+    <div class="card soft-card">
+        <h2>⚡ Academic Risk Indicator</h2>
 
-    <div class="risk-gauge">
-        <div class="risk-circle"
-             style="background: conic-gradient(
-                {% if result.Risk_Score > 70 %}
-                    #ef4444 {{ result.Risk_Score }}%,
-                {% elif result.Risk_Score > 40 %}
-                    #f59e0b {{ result.Risk_Score }}%,
-                {% else %}
-                    #10b981 {{ result.Risk_Score }}%,
-                {% endif %}
-                rgba(255,255,255,0.1) 0%
-             );">
-            <div class="risk-inner">
-                {{ result.Risk_Score }}%
+        <div class="risk-gauge">
+            <div class="risk-circle"
+                 style="background: conic-gradient(
+                    {% if result.Risk_Score > 70 %}
+                        #ef4444 {{ result.Risk_Score }}%,
+                    {% elif result.Risk_Score > 40 %}
+                        #f59e0b {{ result.Risk_Score }}%,
+                    {% else %}
+                        #10b981 {{ result.Risk_Score }}%,
+                    {% endif %}
+                    rgba(255,255,255,0.1) 0%
+                 );">
+
+                <div class="risk-inner">
+                    <span class="counter"
+                          data-target="{{ result.Risk_Score }}">0</span>%
+                </div>
             </div>
-        </div>
 
-        <p class="risk-label">
-            {% if result.Risk_Score > 70 %}
-                High Academic Risk
-            {% elif result.Risk_Score > 40 %}
-                Moderate Academic Risk
-            {% else %}
-                Low Academic Risk
-            {% endif %}
-        </p>
+            <p class="risk-label">
+                {% if result.Risk_Score > 70 %}
+                    High Academic Risk
+                {% elif result.Risk_Score > 40 %}
+                    Moderate Academic Risk
+                {% else %}
+                    Low Academic Risk
+                {% endif %}
+            </p>
+        </div>
     </div>
-</div>
 
     <!-- ================= STRATEGY SHIFT ================= -->
 
@@ -108,7 +124,7 @@
         </div>
     </div>
 
-    <!-- ================= CLUSTER PROFILE ================= -->
+    <!-- ================= CLUSTER ================= -->
 
     <div class="card soft-card">
         <h2>🧬 Cluster Profile</h2>
@@ -125,7 +141,8 @@
             <div class="issue-row">
                 <span class="issue-name">{{ issue.name }}</span>
                 <div class="severity-bar">
-                    <div class="severity-fill" style="width: {{ issue.severity }}%;">
+                    <div class="severity-fill"
+                         style="width: {{ issue.severity }}%;">
                         {{ issue.severity }}
                     </div>
                 </div>
@@ -145,12 +162,14 @@
     </div>
     {% endif %}
 
+    <!-- ================= RADAR CHART ================= -->
+
     <div class="card soft-card">
         <h2>📈 Academic Profile Radar</h2>
         <canvas id="radarChart"></canvas>
     </div>
 
-    <!-- ================= ACTION BUTTON ================= -->
+    <!-- ================= ACTION ================= -->
 
     <div class="center">
         <a href="/" class="btn-secondary soft-secondary">
@@ -159,7 +178,10 @@
     </div>
 
 </div>
-    <script>
+
+<!-- ================= RADAR SCRIPT ================= -->
+
+<script>
 const ctx = document.getElementById('radarChart');
 
 new Chart(ctx, {
@@ -208,5 +230,32 @@ new Chart(ctx, {
     }
 });
 </script>
+
+<!-- ================= COUNTER ANIMATION ================= -->
+
+<script>
+const counters = document.querySelectorAll('.counter');
+
+counters.forEach(counter => {
+    counter.innerText = '0';
+    const target = +counter.getAttribute('data-target');
+    const duration = 1500;
+    const increment = target / (duration / 16);
+    let count = 0;
+
+    function updateCounter() {
+        count += increment;
+        if (count < target) {
+            counter.innerText = Math.floor(count);
+            requestAnimationFrame(updateCounter);
+        } else {
+            counter.innerText = target;
+        }
+    }
+
+    updateCounter();
+});
+</script>
+
 </body>
 </html>
