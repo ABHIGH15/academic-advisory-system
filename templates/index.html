@@ -2,37 +2,91 @@
 <html>
 <head>
     <title>Academic Advisory System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body>
+<body class="soft-compute-bg">
+<div class="container soft-glass">
 
-<div class="container">
-    <h1>🎓 Academic Intelligence System</h1>
-    <p class="subtitle">Enter your academic indicators to receive a personalized advisory report</p>
+    <h1 class="soft-title">🎓 Academic Intelligence System</h1>
+    <p class="subtitle soft-desc">Enter your academic indicators for soft computing analysis</p>
 
-    <form action="/analyze" method="post" class="form-card">
+    <form action="/analyze" method="post" class="form-card soft-card">
 
-        {% set fields = [
-            ("attendance", "Attendance Rate"),
-            ("concept", "Concept Clarity"),
-            ("practice", "Practice Frequency"),
-            ("internal", "Internal Assessment"),
-            ("assignment", "Assignment Quality"),
-            ("time", "Time Management"),
-            ("consistency", "Learning Consistency")
-        ] %}
-
-        {% for name, label in fields %}
-        <div class="slider-group">
-            <label>{{ label }}: <span id="{{name}}Val">50</span></label>
-            <input type="range" name="{{name}}" min="0" max="100" value="50"
-                   oninput="{{name}}Val.innerText = this.value">
+        <!-- SLIDER 1: ATTENDANCE -->
+        <div class="slider-group soft-slider">
+            <label class="soft-label">Attendance Rate: <span id="attendanceVal" class="soft-value">50</span>%</label>
+            <input type="range" name="attendance" min="0" max="100" value="50" class="soft-range"
+                   oninput="document.getElementById('attendanceVal').innerText = this.value; document.getElementById('attendanceFill').style.width = this.value + '%';">
+            <div class="soft-track">
+                <div class="soft-fill" id="attendanceFill"></div>
+            </div>
         </div>
-        {% endfor %}
 
-        <button type="submit" class="btn-primary">Analyze Performance</button>
+        <!-- SLIDER 2: CONCEPT CLARITY -->
+        <div class="slider-group soft-slider">
+            <label class="soft-label">Concept Clarity: <span id="conceptVal" class="soft-value">50</span>%</label>
+            <input type="range" name="concept" min="0" max="100" value="50" class="soft-range"
+                   oninput="document.getElementById('conceptVal').innerText = this.value; document.getElementById('conceptFill').style.width = this.value + '%';">
+            <div class="soft-track">
+                <div class="soft-fill" id="conceptFill"></div>
+            </div>
+        </div>
+
+        <!-- SLIDER 3: PRACTICE FREQUENCY -->
+        <div class="slider-group soft-slider">
+            <label class="soft-label">Practice Frequency: <span id="practiceVal" class="soft-value">50</span>%</label>
+            <input type="range" name="practice" min="0" max="100" value="50" class="soft-range"
+                   oninput="document.getElementById('practiceVal').innerText = this.value; document.getElementById('practiceFill').style.width = this.value + '%';">
+            <div class="soft-track">
+                <div class="soft-fill" id="practiceFill"></div>
+            </div>
+        </div>
+
+        <!-- SLIDER 4: INTERNAL ASSESSMENT -->
+        <div class="slider-group soft-slider">
+            <label class="soft-label">Internal Assessment: <span id="internalVal" class="soft-value">50</span>%</label>
+            <input type="range" name="internal" min="0" max="100" value="50" class="soft-range"
+                   oninput="document.getElementById('internalVal').innerText = this.value; document.getElementById('internalFill').style.width = this.value + '%';">
+            <div class="soft-track">
+                <div class="soft-fill" id="internalFill"></div>
+            </div>
+        </div>
+
+        <!-- SLIDER 5: ASSIGNMENT QUALITY -->
+        <div class="slider-group soft-slider">
+            <label class="soft-label">Assignment Quality: <span id="assignmentVal" class="soft-value">50</span>%</label>
+            <input type="range" name="assignment" min="0" max="100" value="50" class="soft-range"
+                   oninput="document.getElementById('assignmentVal').innerText = this.value; document.getElementById('assignmentFill').style.width = this.value + '%';">
+            <div class="soft-track">
+                <div class="soft-fill" id="assignmentFill"></div>
+            </div>
+        </div>
+
+        <!-- SLIDER 6: TIME MANAGEMENT -->
+        <div class="slider-group soft-slider">
+            <label class="soft-label">Time Management: <span id="timeVal" class="soft-value">50</span>%</label>
+            <input type="range" name="time" min="0" max="100" value="50" class="soft-range"
+                   oninput="document.getElementById('timeVal').innerText = this.value; document.getElementById('timeFill').style.width = this.value + '%';">
+            <div class="soft-track">
+                <div class="soft-fill" id="timeFill"></div>
+            </div>
+        </div>
+
+        <!-- SLIDER 7: LEARNING CONSISTENCY -->
+        <div class="slider-group soft-slider">
+            <label class="soft-label">Learning Consistency: <span id="consistencyVal" class="soft-value">50</span>%</label>
+            <input type="range" name="consistency" min="0" max="100" value="50" class="soft-range"
+                   oninput="document.getElementById('consistencyVal').innerText = this.value; document.getElementById('consistencyFill').style.width = this.value + '%';">
+            <div class="soft-track">
+                <div class="soft-fill" id="consistencyFill"></div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-primary soft-compute-btn">Analyze Performance</button>
     </form>
-</div>
 
+</div>
 </body>
 </html>
