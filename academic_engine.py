@@ -17,6 +17,10 @@ feature_columns = [
     "Learning_Consistency"
 ]
 
+# ------------------------------
+# Core Prediction
+# ------------------------------
+
 def predict_effectiveness(input_data):
     df = pd.DataFrame([input_data], columns=feature_columns)
     scaled = scaler.transform(df)
@@ -30,7 +34,36 @@ def assign_strategy(score):
     else:
         return "Advanced Enrichment Strategy"
 
+# ------------------------------
+# Improvement Simulation
+# ------------------------------
+
+def simulate_improvement(input_data):
+    original_score = predict_effectiveness(input_data)
+    
+    improved = input_data.copy()
+    
+    for key in improved:
+        improved[key] = min(100, improved[key] + 10)
+    
+    projected_score = predict_effectiveness(improved)
+    
+    improvement = projected_score - original_score
+    improvement_percent = (improvement / original_score) * 100 if original_score != 0 else 0
+    
+    return {
+        "Original": round(original_score, 2),
+        "Projected": round(projected_score, 2),
+        "Improvement": round(improvement, 2),
+        "Improvement_Percent": round(improvement_percent, 2)
+    }
+
+# ------------------------------
+# Main Analysis Function
+# ------------------------------
+
 def analyze_student(input_data):
+    
     effectiveness = predict_effectiveness(input_data)
     
     cluster = cluster_model.predict(
@@ -39,8 +72,11 @@ def analyze_student(input_data):
     
     strategy = assign_strategy(effectiveness)
     
+    simulation = simulate_improvement(input_data)
+    
     return {
         "Effectiveness": round(effectiveness, 2),
         "Cluster": int(cluster),
-        "Strategy": strategy
+        "Strategy": strategy,
+        "Simulation": simulation
     }
