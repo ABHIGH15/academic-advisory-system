@@ -80,12 +80,24 @@ def analyze_student(input_data):
 
     projected_strategy = assign_strategy(simulation["Projected"])
 
+    risk_score = 0
+
+    if cluster == 2:
+        risk_score = 80
+    elif cluster == 0:
+        risk_score = 60
+    elif cluster == 3:
+        risk_score = 40
+    else:
+        risk_score = 20
+
     return {
         "Effectiveness": round(effectiveness, 2),
         "Cluster": int(cluster),
         "Strategy": strategy,
         "Simulation": simulation,
         "Projected_Strategy": projected_strategy,
+        "Risk_Score": risk_score,
         "Top_Issues": [
             {"name": "Concept Clarity", "severity": 72},
             {"name": "Time Management", "severity": 65},
