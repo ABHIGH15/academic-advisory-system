@@ -92,4 +92,5 @@ def analyze_student(input_data):
             {"name": "Practice Frequency", "severity": 58}
         ],
         "AI_Summary": "The student demonstrates moderate conceptual understanding but inconsistent application. Improving structured practice and time management can significantly elevate academic performance."
+        "Feature_Data": input_data
     }
