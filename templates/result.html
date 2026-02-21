@@ -179,9 +179,14 @@
 
 </div>
     <form action="/download_report" method="post">
-    {% for key, value in result.Feature_Data.items() %}
-        <input type="hidden" name="{{ key }}" value="{{ value }}">
-    {% endfor %}
+
+    <input type="hidden" name="original" value="{{ result.Simulation.Original }}">
+    <input type="hidden" name="projected" value="{{ result.Simulation.Projected }}">
+    <input type="hidden" name="improvement" value="{{ result.Simulation.Improvement_Percent }}">
+    <input type="hidden" name="risk" value="{{ result.Risk_Score }}">
+    <input type="hidden" name="strategy" value="{{ result.Strategy }}">
+    <input type="hidden" name="summary" value="{{ result.AI_Summary }}">
+
     <button type="submit" class="btn-primary soft-compute-btn">
         📄 Download PDF Report
     </button>
