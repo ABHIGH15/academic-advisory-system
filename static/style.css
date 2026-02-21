@@ -322,6 +322,69 @@ p {
     box-shadow: var(--soft-shadow);
 }
 
+/* ===== Strategy Shift Layout ===== */
+
+.strategy-shift {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.strategy-block {
+    text-align: center;
+}
+
+.shift-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-bottom: 8px;
+}
+
+.shift-arrow {
+    font-size: 2rem;
+    font-weight: bold;
+    color: rgba(255,255,255,0.8);
+}
+
+/* ===== Issues Section ===== */
+
+.issue-row {
+    margin-bottom: 25px;
+}
+
+.issue-name {
+    font-weight: 600;
+    color: rgba(255,255,255,0.95);
+}
+
+.severity-bar {
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    overflow: hidden;
+    height: 28px;
+    margin-top: 10px;
+}
+
+.severity-fill {
+    background: linear-gradient(135deg, #ef4444, #f87171);
+    height: 100%;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    line-height: 28px;
+    transition: width 1s ease;
+}
+
+/* ===== AI Summary ===== */
+
+.ai-summary {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.95);
+}
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
     .container { width: 95%; }
