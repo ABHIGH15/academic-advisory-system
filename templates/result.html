@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Academic Report</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
@@ -110,6 +111,11 @@
     </div>
     {% endif %}
 
+    <div class="card soft-card">
+        <h2>📈 Academic Profile Radar</h2>
+        <canvas id="radarChart"></canvas>
+    </div>
+
     <!-- ================= ACTION BUTTON ================= -->
 
     <div class="center">
@@ -119,5 +125,54 @@
     </div>
 
 </div>
+    <script>
+const ctx = document.getElementById('radarChart');
+
+new Chart(ctx, {
+    type: 'radar',
+    data: {
+        labels: [
+            "Attendance",
+            "Concept Clarity",
+            "Practice",
+            "Internal",
+            "Assignment",
+            "Time Mgmt",
+            "Consistency"
+        ],
+        datasets: [{
+            label: 'Current Academic Profile',
+            data: [
+                {{ result.Feature_Data.Attendance_Rate }},
+                {{ result.Feature_Data.Concept_Clarity }},
+                {{ result.Feature_Data.Practice_Frequency }},
+                {{ result.Feature_Data.Internal_Assessment }},
+                {{ result.Feature_Data.Assignment_Quality }},
+                {{ result.Feature_Data.Time_Management }},
+                {{ result.Feature_Data.Learning_Consistency }}
+            ],
+            backgroundColor: 'rgba(99, 102, 241, 0.3)',
+            borderColor: 'rgba(99, 102, 241, 1)',
+            borderWidth: 2
+        }]
+    },
+    options: {
+        scales: {
+            r: {
+                angleLines: { color: "rgba(255,255,255,0.2)" },
+                grid: { color: "rgba(255,255,255,0.2)" },
+                pointLabels: { color: "white" },
+                ticks: {
+                    backdropColor: "transparent",
+                    color: "white"
+                }
+            }
+        },
+        plugins: {
+            legend: { labels: { color: "white" } }
+        }
+    }
+});
+</script>
 </body>
 </html>
