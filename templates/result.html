@@ -178,6 +178,14 @@
     </div>
 
 </div>
+    <form action="/download_report" method="post">
+    {% for key, value in result.Feature_Data.items() %}
+        <input type="hidden" name="{{ key }}" value="{{ value }}">
+    {% endfor %}
+    <button type="submit" class="btn-primary soft-compute-btn">
+        📄 Download PDF Report
+    </button>
+</form>
 
 <!-- ================= RADAR SCRIPT ================= -->
 
