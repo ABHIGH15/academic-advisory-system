@@ -50,6 +50,40 @@
         {% endif %}
     </div>
 
+    <!-- ================= RISK GAUGE ================= -->
+
+<div class="card soft-card">
+    <h2>⚡ Academic Risk Indicator</h2>
+
+    <div class="risk-gauge">
+        <div class="risk-circle"
+             style="background: conic-gradient(
+                {% if result.Risk_Score > 70 %}
+                    #ef4444 {{ result.Risk_Score }}%,
+                {% elif result.Risk_Score > 40 %}
+                    #f59e0b {{ result.Risk_Score }}%,
+                {% else %}
+                    #10b981 {{ result.Risk_Score }}%,
+                {% endif %}
+                rgba(255,255,255,0.1) 0%
+             );">
+            <div class="risk-inner">
+                {{ result.Risk_Score }}%
+            </div>
+        </div>
+
+        <p class="risk-label">
+            {% if result.Risk_Score > 70 %}
+                High Academic Risk
+            {% elif result.Risk_Score > 40 %}
+                Moderate Academic Risk
+            {% else %}
+                Low Academic Risk
+            {% endif %}
+        </p>
+    </div>
+</div>
+
     <!-- ================= STRATEGY SHIFT ================= -->
 
     <div class="card soft-card">
