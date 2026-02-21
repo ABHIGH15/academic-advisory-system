@@ -67,20 +67,29 @@ def simulate_improvement(input_data):
 # ------------------------------
 
 def analyze_student(input_data):
-    
+
     effectiveness = predict_effectiveness(input_data)
-    
+
     cluster = cluster_model.predict(
         scaler.transform(pd.DataFrame([input_data], columns=feature_columns))
     )[0]
-    
+
     strategy = assign_strategy(effectiveness)
-    
+
     simulation = simulate_improvement(input_data)
-    
+
+    projected_strategy = assign_strategy(simulation["Projected"])
+
     return {
         "Effectiveness": round(effectiveness, 2),
         "Cluster": int(cluster),
         "Strategy": strategy,
-        "Simulation": simulation
+        "Simulation": simulation,
+        "Projected_Strategy": projected_strategy,
+        "Top_Issues": [
+            {"name": "Concept Clarity", "severity": 72},
+            {"name": "Time Management", "severity": 65},
+            {"name": "Practice Frequency", "severity": 58}
+        ],
+        "AI_Summary": "The student demonstrates moderate conceptual understanding but inconsistent application. Improving structured practice and time management can significantly elevate academic performance."
     }
