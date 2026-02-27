@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Academic Report</title>
+    <title>Academic Optimization Report</title>
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -18,7 +18,7 @@
 <body class="soft-report-bg">
 <div class="container soft-glass">
 
-    <h1 class="soft-title">📊 Academic Diagnostic Report</h1>
+    <h1 class="soft-title">📊 Academic Optimization Report</h1>
 
     <!-- ================= EFFECTIVENESS ================= -->
 
@@ -28,7 +28,7 @@
             <div class="progress soft-fill-progress"
                  style="width: {{ result.Simulation.Original }}%;">
                 <span class="counter"
-                      data-target="{{ result.Simulation.Original }}">0</span>
+                      data-target="{{ result.Simulation.Original }}">0</span>%
             </div>
         </div>
     </div>
@@ -39,7 +39,7 @@
             <div class="progress soft-blue-progress"
                  style="width: {{ result.Simulation.Projected }}%;">
                 <span class="counter"
-                      data-target="{{ result.Simulation.Projected }}">0</span>
+                      data-target="{{ result.Simulation.Projected }}">0</span>%
             </div>
         </div>
 
@@ -57,7 +57,7 @@
 
         {% if "Reinforcement" in result.Strategy %}
             <span class="badge red soft-badge">{{ result.Strategy }}</span>
-        {% elif "Balanced" in result.Strategy %}
+        {% elif "Structured" in result.Strategy %}
             <span class="badge orange soft-badge">{{ result.Strategy }}</span>
         {% else %}
             <span class="badge green soft-badge">{{ result.Strategy }}</span>
@@ -143,7 +143,7 @@
                 <div class="severity-bar">
                     <div class="severity-fill"
                          style="width: {{ issue.severity }}%;">
-                        {{ issue.severity }}
+                        {{ issue.severity }}%
                     </div>
                 </div>
             </div>
@@ -162,6 +162,25 @@
     </div>
     {% endif %}
 
+    <!-- ================= ACTION PLAN ================= -->
+
+    {% if result.Action_Plan %}
+    <div class="card soft-card">
+        <h2>📘 Personalized Academic Optimization Plan</h2>
+
+        {% for section in result.Action_Plan %}
+            <div class="action-section">
+                <h3>{{ section.title }}</h3>
+                <ul>
+                    {% for suggestion in section.suggestions %}
+                        <li>{{ suggestion }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     <!-- ================= RADAR CHART ================= -->
 
     <div class="card soft-card">
@@ -169,7 +188,22 @@
         <canvas id="radarChart"></canvas>
     </div>
 
-    <!-- ================= ACTION ================= -->
+    <!-- ================= PDF DOWNLOAD ================= -->
+
+    <div class="card soft-card center">
+        <form action="/download_report" method="post">
+            <input type="hidden" name="original" value="{{ result.Simulation.Original }}">
+            <input type="hidden" name="projected" value="{{ result.Simulation.Projected }}">
+            <input type="hidden" name="improvement" value="{{ result.Simulation.Improvement_Percent }}">
+            <input type="hidden" name="risk" value="{{ result.Risk_Score }}">
+            <input type="hidden" name="strategy" value="{{ result.Strategy }}">
+            <input type="hidden" name="summary" value="{{ result.AI_Summary }}">
+
+            <button type="submit" class="btn-primary soft-compute-btn">
+                📄 Download PDF Report
+            </button>
+        </form>
+    </div>
 
     <div class="center">
         <a href="/" class="btn-secondary soft-secondary">
@@ -178,19 +212,6 @@
     </div>
 
 </div>
-    <form action="/download_report" method="post">
-
-    <input type="hidden" name="original" value="{{ result.Simulation.Original }}">
-    <input type="hidden" name="projected" value="{{ result.Simulation.Projected }}">
-    <input type="hidden" name="improvement" value="{{ result.Simulation.Improvement_Percent }}">
-    <input type="hidden" name="risk" value="{{ result.Risk_Score }}">
-    <input type="hidden" name="strategy" value="{{ result.Strategy }}">
-    <input type="hidden" name="summary" value="{{ result.AI_Summary }}">
-
-    <button type="submit" class="btn-primary soft-compute-btn">
-        📄 Download PDF Report
-    </button>
-</form>
 
 <!-- ================= RADAR SCRIPT ================= -->
 
@@ -210,7 +231,7 @@ new Chart(ctx, {
             "Consistency"
         ],
         datasets: [{
-            label: 'Current Academic Profile',
+            label: 'Academic Profile',
             data: [
                 {{ result.Feature_Data.Attendance_Rate }},
                 {{ result.Feature_Data.Concept_Clarity }},
