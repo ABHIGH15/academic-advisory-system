@@ -1,90 +1,101 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Academic Advisory System</title>
+    <title>Academic Optimization System</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
+
 <body class="soft-compute-bg">
 <div class="container soft-glass">
 
-    <h1 class="soft-title">🎓 Academic Intelligence System</h1>
-    <p class="subtitle soft-desc">Enter your academic indicators for soft computing analysis</p>
+    <h1 class="soft-title">🎓 Academic Optimization Engine</h1>
+    <p class="subtitle soft-desc">
+        Intelligent Hybrid Soft Computing Analysis of Academic Performance & Cognitive Wellness
+    </p>
 
     <form action="/analyze" method="post" class="form-card soft-card">
 
-        <!-- SLIDER 1: ATTENDANCE -->
-        <div class="slider-group soft-slider">
-            <label class="soft-label">Attendance Rate: <span id="attendanceVal" class="soft-value">50</span>%</label>
-            <input type="range" name="attendance" min="0" max="100" value="50" class="soft-range"
-                   oninput="document.getElementById('attendanceVal').innerText = this.value; document.getElementById('attendanceFill').style.width = this.value + '%';">
-            <div class="soft-track">
-                <div class="soft-fill" id="attendanceFill"></div>
-            </div>
+        <!-- ================= ACADEMIC METRICS ================= -->
+
+        <h2 class="section-title">📊 Academic Performance</h2>
+
+        <div class="input-group">
+            <label>Attendance (%)</label>
+            <input type="number" name="attendance" min="0" max="100" required>
         </div>
 
-        <!-- SLIDER 2: CONCEPT CLARITY -->
-        <div class="slider-group soft-slider">
-            <label class="soft-label">Concept Clarity: <span id="conceptVal" class="soft-value">50</span>%</label>
-            <input type="range" name="concept" min="0" max="100" value="50" class="soft-range"
-                   oninput="document.getElementById('conceptVal').innerText = this.value; document.getElementById('conceptFill').style.width = this.value + '%';">
-            <div class="soft-track">
-                <div class="soft-fill" id="conceptFill"></div>
-            </div>
+        <div class="input-group">
+            <label>Quiz Average (%)</label>
+            <input type="number" name="quiz_avg" min="0" max="100" required>
         </div>
 
-        <!-- SLIDER 3: PRACTICE FREQUENCY -->
-        <div class="slider-group soft-slider">
-            <label class="soft-label">Practice Frequency: <span id="practiceVal" class="soft-value">50</span>%</label>
-            <input type="range" name="practice" min="0" max="100" value="50" class="soft-range"
-                   oninput="document.getElementById('practiceVal').innerText = this.value; document.getElementById('practiceFill').style.width = this.value + '%';">
-            <div class="soft-track">
-                <div class="soft-fill" id="practiceFill"></div>
-            </div>
+        <div class="input-group">
+            <label>Internal Assessment (%)</label>
+            <input type="number" name="internal" min="0" max="100" required>
         </div>
 
-        <!-- SLIDER 4: INTERNAL ASSESSMENT -->
-        <div class="slider-group soft-slider">
-            <label class="soft-label">Internal Assessment: <span id="internalVal" class="soft-value">50</span>%</label>
-            <input type="range" name="internal" min="0" max="100" value="50" class="soft-range"
-                   oninput="document.getElementById('internalVal').innerText = this.value; document.getElementById('internalFill').style.width = this.value + '%';">
-            <div class="soft-track">
-                <div class="soft-fill" id="internalFill"></div>
-            </div>
+        <!-- ================= STUDY BEHAVIOR ================= -->
+
+        <h2 class="section-title">📚 Study Behavior</h2>
+
+        <div class="input-group">
+            <label>Study Hours Per Day</label>
+            <input type="number" step="0.1" name="study_hours" min="0" max="16" required>
         </div>
 
-        <!-- SLIDER 5: ASSIGNMENT QUALITY -->
-        <div class="slider-group soft-slider">
-            <label class="soft-label">Assignment Quality: <span id="assignmentVal" class="soft-value">50</span>%</label>
-            <input type="range" name="assignment" min="0" max="100" value="50" class="soft-range"
-                   oninput="document.getElementById('assignmentVal').innerText = this.value; document.getElementById('assignmentFill').style.width = this.value + '%';">
-            <div class="soft-track">
-                <div class="soft-fill" id="assignmentFill"></div>
-            </div>
+        <div class="input-group">
+            <label>Study Days Per Week (0-7)</label>
+            <input type="number" name="study_days" min="0" max="7" required>
         </div>
 
-        <!-- SLIDER 6: TIME MANAGEMENT -->
-        <div class="slider-group soft-slider">
-            <label class="soft-label">Time Management: <span id="timeVal" class="soft-value">50</span>%</label>
-            <input type="range" name="time" min="0" max="100" value="50" class="soft-range"
-                   oninput="document.getElementById('timeVal').innerText = this.value; document.getElementById('timeFill').style.width = this.value + '%';">
-            <div class="soft-track">
-                <div class="soft-fill" id="timeFill"></div>
-            </div>
+        <div class="input-group">
+            <label>Practice Problems Solved Per Week</label>
+            <input type="number" name="practice_per_week" min="0" max="200" required>
         </div>
 
-        <!-- SLIDER 7: LEARNING CONSISTENCY -->
-        <div class="slider-group soft-slider">
-            <label class="soft-label">Learning Consistency: <span id="consistencyVal" class="soft-value">50</span>%</label>
-            <input type="range" name="consistency" min="0" max="100" value="50" class="soft-range"
-                   oninput="document.getElementById('consistencyVal').innerText = this.value; document.getElementById('consistencyFill').style.width = this.value + '%';">
-            <div class="soft-track">
-                <div class="soft-fill" id="consistencyFill"></div>
-            </div>
+        <div class="input-group">
+            <label>Average Assignment Delay (Days)</label>
+            <input type="number" step="0.1" name="assignment_delay" min="0" max="30" required>
         </div>
 
-        <button type="submit" class="btn-primary soft-compute-btn">Analyze Performance</button>
+        <!-- ================= WELLNESS & COGNITIVE ================= -->
+
+        <h2 class="section-title">🧠 Cognitive & Wellness Factors</h2>
+
+        <div class="input-group">
+            <label>Sleep Hours Per Night</label>
+            <input type="number" step="0.1" name="sleep_hours" min="0" max="12" required>
+        </div>
+
+        <div class="input-group">
+            <label>Screen Time Per Day (Hours)</label>
+            <input type="number" step="0.1" name="screen_time" min="0" max="16" required>
+        </div>
+
+        <div class="input-group">
+            <label>Self-Confidence Level</label>
+            <select name="confidence" required>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>Exam Anxiety Level</label>
+            <select name="anxiety" required>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn-primary soft-compute-btn">
+            Analyze Academic Profile
+        </button>
+
     </form>
 
 </div>
