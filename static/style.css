@@ -435,3 +435,31 @@ canvas {
     font-size: 1.1rem;
     color: rgba(255,255,255,0.95);
 }
+.section-title {
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.95);
+}
+
+.input-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group label {
+    color: white;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.input-group input,
+.input-group select {
+    padding: 12px;
+    border-radius: 12px;
+    border: none;
+    font-size: 1rem;
+    font-family: inherit;
+}
