@@ -20,7 +20,6 @@
 
     <div class="card soft-card">
         <h2>📊 Your Current Performance</h2>
-        <p>This score represents your overall academic effectiveness:</p>
 
         <div class="progress-bar soft-progress">
             <div class="progress soft-fill-progress"
@@ -37,11 +36,70 @@
         <p><strong>{{ result.Strategy }}</strong></p>
     </div>
 
-    <!-- ================= CONCEPT EXPLANATION ================= -->
+    <!-- ================= ⭐ PRIORITY ================= -->
+
+    {% if result.Priority_Areas %}
+    <div class="card soft-card">
+        <h2>⭐ Top Priority Areas</h2>
+
+        <ul>
+            {% for item in result.Priority_Areas %}
+                <li>
+                    <strong>{{ item.feature.replace('_',' ') }}</strong>
+                    (Current: {{ item.value }})
+                </li>
+            {% endfor %}
+        </ul>
+
+        <p style="margin-top:10px;">
+            👉 Focus on these FIRST for maximum improvement
+        </p>
+    </div>
+    {% endif %}
+
+    <!-- ================= 🎯 TARGET PLAN ================= -->
+
+    {% if result.Target_Plan %}
+    <div class="card soft-card">
+        <h2>🎯 Target Plan (Reach High Performance)</h2>
+
+        <ul>
+            {% for step in result.Target_Plan %}
+                <li>
+                    Increase <strong>{{ step.feature.replace('_',' ') }}</strong>
+                    to <strong>{{ step.target }}</strong>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <p style="margin-top:10px;">
+            👉 Achieving these targets can significantly boost your score
+        </p>
+    </div>
+    {% endif %}
+
+    <!-- ================= 🧠 COGNITIVE ================= -->
+
+    <div class="card soft-card">
+        <h2>🧠 Cognitive Load Analysis</h2>
+
+        <div class="progress-bar soft-progress">
+            <div class="progress"
+                 style="width: {{ result.Cognitive_Load }}%; background:#8b5cf6;">
+                {{ result.Cognitive_Load }}%
+            </div>
+        </div>
+
+        <p style="margin-top:10px;">
+            {{ result.Cognitive_Insight }}
+        </p>
+    </div>
+
+    <!-- ================= CONCEPT ================= -->
 
     {% if result.Concept_Explanation %}
     <div class="card soft-card">
-        <h2>🧠 Why Your Concept Clarity is Like This</h2>
+        <h2>🧠 Concept Clarity Analysis</h2>
         <ul>
             {% for line in result.Concept_Explanation %}
                 <li>{{ line }}</li>
@@ -50,17 +108,17 @@
     </div>
     {% endif %}
 
-    <!-- ================= CLUSTER INTERPRETATION ================= -->
+    <!-- ================= CLUSTER ================= -->
 
     <div class="card soft-card">
-        <h2>🧬 Your Academic Profile</h2>
+        <h2>🧬 Academic Profile</h2>
         <p>{{ result.Cluster_Insight }}</p>
     </div>
 
     <!-- ================= RISK ================= -->
 
     <div class="card soft-card">
-        <h2>⚠ Academic Risk Analysis</h2>
+        <h2>⚠ Academic Risk</h2>
 
         <div class="progress-bar soft-progress">
             <div class="progress"
@@ -74,7 +132,7 @@
             </div>
         </div>
 
-        <p style="margin-top:15px;">
+        <p style="margin-top:10px;">
             {{ result.Risk_Reason }}
         </p>
     </div>
@@ -83,26 +141,24 @@
 
     {% if result.Optimization_Insights %}
     <div class="card soft-card">
-        <h2>🚀 Exact Improvements Needed</h2>
+        <h2>🚀 Improvement Plan</h2>
 
         <ul>
             {% for step in result.Optimization_Insights %}
                 <li>
-                    Increase <strong>{{ step.feature.replace('_',' ') }}</strong>
-                    from <strong>{{ step.from }}</strong>
-                    → <strong>{{ step.to }}</strong>
-                    (Improve by {{ step.change }})
+                    Improve <strong>{{ step.feature.replace('_',' ') }}</strong>
+                    from {{ step.from }} → {{ step.to }}
                 </li>
             {% endfor %}
         </ul>
     </div>
     {% endif %}
 
-    <!-- ================= SMART TIPS ================= -->
+    <!-- ================= TIPS ================= -->
 
     {% if result.Smart_Tips %}
     <div class="card soft-card">
-        <h2>💡 Smart Tips (How to Improve)</h2>
+        <h2>💡 Smart Tips</h2>
 
         <ul>
             {% for tip in result.Smart_Tips %}
@@ -115,7 +171,7 @@
     <!-- ================= RADAR ================= -->
 
     <div class="card soft-card">
-        <h2>📈 Your Academic Profile</h2>
+        <h2>📈 Academic Profile</h2>
         <canvas id="radarChart"></canvas>
     </div>
 
@@ -142,8 +198,6 @@
 
 </div>
 
-<!-- ================= RADAR SCRIPT ================= -->
-
 <script>
 const ctx = document.getElementById('radarChart');
 
@@ -151,13 +205,8 @@ new Chart(ctx, {
     type: 'radar',
     data: {
         labels: [
-            "Attendance",
-            "Concept",
-            "Practice",
-            "Internal",
-            "Assignment",
-            "Time Mgmt",
-            "Consistency"
+            "Attendance","Concept","Practice","Internal",
+            "Assignment","Time Mgmt","Consistency"
         ],
         datasets: [{
             label: 'Academic Profile',
@@ -171,22 +220,8 @@ new Chart(ctx, {
                 {{ result.Feature_Data.Learning_Consistency }}
             ],
             backgroundColor: 'rgba(99,102,241,0.3)',
-            borderColor: 'rgba(99,102,241,1)',
-            borderWidth: 2
+            borderColor: 'rgba(99,102,241,1)'
         }]
-    },
-    options: {
-        scales: {
-            r: {
-                angleLines: { color: "rgba(255,255,255,0.2)" },
-                grid: { color: "rgba(255,255,255,0.2)" },
-                pointLabels: { color: "white" },
-                ticks: { backdropColor: "transparent", color: "white" }
-            }
-        },
-        plugins: {
-            legend: { labels: { color: "white" } }
-        }
     }
 });
 </script>
