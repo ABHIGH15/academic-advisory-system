@@ -3,10 +3,6 @@ import numpy as np
 import pandas as pd
 import os
 
-# -------------------------------------------------
-# Load Models
-# -------------------------------------------------
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 ann_model = joblib.load(os.path.join(BASE_DIR, "models/ann_model.pkl"))
@@ -23,16 +19,10 @@ feature_columns = [
     "Learning_Consistency"
 ]
 
-# -------------------------------------------------
-# Utility
-# -------------------------------------------------
-
 def clamp(value):
     return max(0, min(100, value))
 
-# -------------------------------------------------
-# 🔥 FUZZY LOGIC SYSTEM (WITH EXPLANATION)
-# -------------------------------------------------
+# ---------------- FUZZY ----------------
 
 def triangular(x, a, b, c):
     if x <= a or x >= c:
@@ -97,238 +87,159 @@ def fuzzy_concept_clarity(quiz, confidence, anxiety, explain=False):
         explanation.append(f"Confidence is {c_max.upper()} ({round(c[c_max],2)})")
         explanation.append(f"Anxiety is {a_max.upper()} ({round(a[a_max],2)})")
 
-        if r3 > r1 and r3 > r2:
-            explanation.append("High anxiety or low quiz performance is reducing clarity.")
-        elif r1 > r2:
-            explanation.append("Strong quiz performance and confidence improve clarity.")
-        else:
-            explanation.append("Moderate performance results in balanced clarity.")
-
         return score, explanation
 
     return score
 
-# -------------------------------------------------
-# Derived Soft Variable Computation
-# -------------------------------------------------
+# ---------------- DERIVED ----------------
 
-def compute_learning_consistency(study_days, study_hours, sleep_hours):
-    study_days_score = (study_days / 7) * 100
-    study_hours_score = min(study_hours / 5, 1) * 100
-    sleep_score = min(sleep_hours / 8, 1) * 100
-
-    consistency = (
-        0.5 * study_days_score +
-        0.3 * study_hours_score +
-        0.2 * sleep_score
-    )
-
-    return clamp(consistency)
+def compute_learning_consistency(sd, sh, sl):
+    return clamp(0.5*(sd/7*100) + 0.3*(min(sh/5,1)*100) + 0.2*(min(sl/8,1)*100))
 
 
-def compute_time_management(study_hours, screen_time, delay_days):
-    study_score = min(study_hours / 5, 1) * 100
-    screen_penalty = min(screen_time / 8, 1) * 100
-    delay_penalty = min(delay_days / 7, 1) * 100
-
-    tm = (
-        0.6 * study_score -
-        0.25 * screen_penalty -
-        0.15 * delay_penalty
-    )
-
-    return clamp(tm)
+def compute_time_management(sh, st, d):
+    return clamp(0.6*(min(sh/5,1)*100) - 0.25*(min(st/8,1)*100) - 0.15*(min(d/7,1)*100))
 
 
-def compute_cognitive_load(study_hours, screen_time, sleep_hours):
-    sleep_deficit = max(0, 8 - sleep_hours) / 8 * 100
-    screen_load = min(screen_time / 8, 1) * 100
-    overstudy = max(0, study_hours - 6) / 6 * 100
-
-    load = (
-        0.5 * screen_load +
-        0.3 * sleep_deficit +
-        0.2 * overstudy
-    )
-
-    return clamp(load)
+def compute_cognitive_load(sh, st, sl):
+    return clamp(0.5*(min(st/8,1)*100) + 0.3*(max(0,8-sl)/8*100) + 0.2*(max(0,sh-6)/6*100))
 
 
-def compute_motivation(attendance, practice_per_week, confidence):
-    confidence_map = {"low": 30, "medium": 60, "high": 90}
-    confidence_score = confidence_map.get(confidence.lower(), 50)
+def compute_motivation(att, p, conf):
+    return clamp(0.5*att + 0.3*(min(p/30,1)*100) + 0.2*(60 if conf=="medium" else 90 if conf=="high" else 30))
 
-    practice_score = min(practice_per_week / 30, 1) * 100
-
-    motivation = (
-        0.5 * attendance +
-        0.3 * practice_score +
-        0.2 * confidence_score
-    )
-
-    return clamp(motivation)
-
-# -------------------------------------------------
-# 🔥 FULL STRATEGY SYSTEM (NEW)
-# -------------------------------------------------
+# ---------------- STRATEGY ----------------
 
 def assign_strategy(score, cluster):
 
     if score < 40:
         return {
             "name": "Reinforcement Strategy",
-            "definition": "Student lacks foundational understanding and consistency.",
-            "goal": "Build strong academic fundamentals.",
-            "actions": [
-                "Revise core concepts daily",
-                "Solve minimum 20 practice problems per week",
-                "Attend doubt-solving sessions",
-                "Focus on understanding over memorization"
-            ],
-            "weekly_plan": [
-                "Day 1-3: Concept learning",
-                "Day 4-5: Practice problems",
-                "Day 6: Revision",
-                "Day 7: Self-test"
-            ]
+            "definition": "Weak foundation",
+            "goal": "Build basics",
+            "actions": ["Revise basics", "Practice daily"],
+            "weekly_plan": ["Concept", "Practice", "Test"]
         }
 
     elif score < 70:
         return {
             "name": "Structured Growth Strategy",
-            "definition": "Student has moderate performance but lacks consistency.",
-            "goal": "Improve stability and efficiency in learning.",
-            "actions": [
-                "Follow fixed study schedule",
-                "Practice active recall",
-                "Take 2 mock tests per month",
-                "Track weekly performance"
-            ],
-            "weekly_plan": [
-                "5 days focused study",
-                "1 day mock test",
-                "1 day revision"
-            ]
+            "definition": "Moderate performance",
+            "goal": "Improve consistency",
+            "actions": ["Scheduled study", "Mock tests"],
+            "weekly_plan": ["Study", "Test", "Revise"]
         }
 
     else:
         return {
-            "name": "Advanced Enrichment Strategy",
-            "definition": "Student is performing well and ready for advanced challenges.",
-            "goal": "Maximize academic excellence.",
-            "actions": [
-                "Solve advanced-level problems",
-                "Work on projects/research",
-                "Participate in competitions",
-                "Mentor peers"
-            ],
-            "weekly_plan": [
-                "Advanced problem solving",
-                "Project work",
-                "Peer teaching sessions"
-            ]
+            "name": "Advanced Strategy",
+            "definition": "High performer",
+            "goal": "Maximize output",
+            "actions": ["Advanced problems", "Projects"],
+            "weekly_plan": ["Deep work", "Research"]
         }
 
-# -------------------------------------------------
-# Core Prediction
-# -------------------------------------------------
+# ---------------- CORE ----------------
 
 def predict_effectiveness(input_data):
     df = pd.DataFrame([input_data], columns=feature_columns)
-    scaled = scaler.transform(df)
-    return ann_model.predict(scaled)[0]
+    return ann_model.predict(scaler.transform(df))[0]
 
-# -------------------------------------------------
-# Improvement Simulation
-# -------------------------------------------------
+# ---------------- SIMULATION ----------------
 
 def simulate_improvement(input_data):
-    original_score = predict_effectiveness(input_data)
-
-    improved = input_data.copy()
-    for key in improved:
-        improved[key] = min(100, improved[key] + 10)
-
-    projected_score = predict_effectiveness(improved)
-
-    improvement = projected_score - original_score
-    improvement_percent = (improvement / original_score) * 100 if original_score != 0 else 0
+    original = predict_effectiveness(input_data)
+    improved = {k:min(100,v+10) for k,v in input_data.items()}
+    projected = predict_effectiveness(improved)
 
     return {
-        "Original": round(original_score, 2),
-        "Projected": round(projected_score, 2),
-        "Improvement": round(improvement, 2),
-        "Improvement_Percent": round(improvement_percent, 2)
+        "Original": round(original,2),
+        "Projected": round(projected,2),
+        "Improvement_Percent": round(((projected-original)/original)*100 if original else 0,2)
     }
 
-# -------------------------------------------------
-# Main Analysis Function
-# -------------------------------------------------
+# ---------------- OPTIMIZATION ----------------
+
+def generate_optimization_plan(data, target=80):
+
+    plan = []
+    current = data.copy()
+
+    for _ in range(10):
+        score = predict_effectiveness(current)
+        if score >= target:
+            break
+
+        best_gain = 0
+        best_feature = None
+
+        for k in current:
+            temp = current.copy()
+            temp[k] = min(100, temp[k] + 5)
+            gain = predict_effectiveness(temp) - score
+
+            if gain > best_gain:
+                best_gain = gain
+                best_feature = k
+
+        if not best_feature:
+            break
+
+        current[best_feature] = min(100, current[best_feature] + 5)
+
+        plan.append({
+            "feature": best_feature,
+            "value": current[best_feature]
+        })
+
+    return plan
+
+# ---------------- MAIN ----------------
 
 def analyze_student(form_input):
 
     attendance = float(form_input["attendance"])
-    quiz_avg = float(form_input["quiz_avg"])
+    quiz = float(form_input["quiz_avg"])
     internal = float(form_input["internal"])
-    study_hours = float(form_input["study_hours"])
-    study_days = float(form_input["study_days"])
-    practice_per_week = float(form_input["practice_per_week"])
-    delay_days = float(form_input["assignment_delay"])
-    sleep_hours = float(form_input["sleep_hours"])
-    screen_time = float(form_input["screen_time"])
-    confidence = form_input["confidence"]
-    anxiety = form_input["anxiety"]
+    sh = float(form_input["study_hours"])
+    sd = float(form_input["study_days"])
+    p = float(form_input["practice_per_week"])
+    d = float(form_input["assignment_delay"])
+    sl = float(form_input["sleep_hours"])
+    st = float(form_input["screen_time"])
+    conf = form_input["confidence"]
+    anx = form_input["anxiety"]
 
-    concept, concept_explanation = fuzzy_concept_clarity(
-        quiz_avg, confidence, anxiety, explain=True
-    )
+    concept, explanation = fuzzy_concept_clarity(quiz, conf, anx, True)
 
-    consistency = compute_learning_consistency(study_days, study_hours, sleep_hours)
-    time_mgmt = compute_time_management(study_hours, screen_time, delay_days)
-    cognitive_load = compute_cognitive_load(study_hours, screen_time, sleep_hours)
-    motivation = compute_motivation(attendance, practice_per_week, confidence)
-
-    practice_score = min(practice_per_week / 30, 1) * 100
-    assignment_quality = 100 - min(delay_days / 7, 1) * 100
+    consistency = compute_learning_consistency(sd, sh, sl)
+    tm = compute_time_management(sh, st, d)
 
     ann_input = {
         "Attendance_Rate": attendance,
         "Concept_Clarity": concept,
-        "Practice_Frequency": practice_score,
+        "Practice_Frequency": min(p/30,1)*100,
         "Internal_Assessment": internal,
-        "Assignment_Quality": assignment_quality,
-        "Time_Management": time_mgmt,
+        "Assignment_Quality": 100 - min(d/7,1)*100,
+        "Time_Management": tm,
         "Learning_Consistency": consistency
     }
 
-    effectiveness = predict_effectiveness(ann_input)
+    eff = predict_effectiveness(ann_input)
+    cluster = cluster_model.predict(scaler.transform(pd.DataFrame([ann_input])))[0]
 
-    cluster = cluster_model.predict(
-        scaler.transform(pd.DataFrame([ann_input], columns=feature_columns))
-    )[0]
-
-    strategy = assign_strategy(effectiveness, cluster)
-
-    simulation = simulate_improvement(ann_input)
-    projected_strategy = assign_strategy(simulation["Projected"], cluster)
-
-    risk_score = 80 if cluster == 2 else 60 if cluster == 0 else 40 if cluster == 3 else 20
-
-    summary = f"""
-    The student demonstrates a predicted academic effectiveness of {round(effectiveness,2)}%.
-    Cognitive load is estimated at {round(cognitive_load,2)}%.
-    Recommended approach: {strategy['name']}.
-    """
+    strategy = assign_strategy(eff, cluster)
+    sim = simulate_improvement(ann_input)
+    opt = generate_optimization_plan(ann_input)
 
     return {
-        "Effectiveness": round(effectiveness, 2),
+        "Effectiveness": round(eff,2),
         "Cluster": int(cluster),
         "Strategy": strategy["name"],
         "Strategy_Details": strategy,
-        "Simulation": simulation,
-        "Projected_Strategy": projected_strategy["name"],
-        "Risk_Score": risk_score,
-        "AI_Summary": summary.strip(),
+        "Simulation": sim,
+        "Risk_Score": 80 if cluster==2 else 60 if cluster==0 else 40 if cluster==3 else 20,
         "Feature_Data": ann_input,
-        "Concept_Explanation": concept_explanation
+        "Concept_Explanation": explanation,
+        "Optimization_Plan": opt
     }
