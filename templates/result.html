@@ -3,13 +3,9 @@
 <head>
     <title>Academic Optimization Report</title>
 
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,10 +21,8 @@
     <div class="card soft-card">
         <h2>Current Effectiveness</h2>
         <div class="progress-bar soft-progress">
-            <div class="progress soft-fill-progress"
-                 style="width: {{ result.Simulation.Original }}%;">
-                <span class="counter"
-                      data-target="{{ result.Simulation.Original }}">0</span>%
+            <div class="progress soft-fill-progress" style="width: {{ result.Simulation.Original }}%;">
+                {{ result.Simulation.Original }}%
             </div>
         </div>
     </div>
@@ -36,90 +30,69 @@
     <div class="card soft-card">
         <h2>Projected Effectiveness</h2>
         <div class="progress-bar soft-progress blue-soft">
-            <div class="progress soft-blue-progress"
-                 style="width: {{ result.Simulation.Projected }}%;">
-                <span class="counter"
-                      data-target="{{ result.Simulation.Projected }}">0</span>%
+            <div class="progress soft-blue-progress" style="width: {{ result.Simulation.Projected }}%;">
+                {{ result.Simulation.Projected }}%
             </div>
         </div>
 
         <p class="improvement soft-gain">
-            Improvement Potential:
-            +<span class="counter"
-                   data-target="{{ result.Simulation.Improvement_Percent }}">0</span>%
+            Improvement Potential: +{{ result.Simulation.Improvement_Percent }}%
         </p>
     </div>
 
     <!-- ================= STRATEGY ================= -->
 
     <div class="card soft-card">
-        <h2>🎯 Recommended Strategy</h2>
+        <h2>🎯 Strategy Recommendation</h2>
 
-        {% if "Reinforcement" in result.Strategy %}
-            <span class="badge red soft-badge">{{ result.Strategy }}</span>
-        {% elif "Structured" in result.Strategy %}
-            <span class="badge orange soft-badge">{{ result.Strategy }}</span>
-        {% else %}
-            <span class="badge green soft-badge">{{ result.Strategy }}</span>
-        {% endif %}
+        <h3>{{ result.Strategy_Details.name }}</h3>
+
+        <p><strong>Definition:</strong> {{ result.Strategy_Details.definition }}</p>
+        <p><strong>Goal:</strong> {{ result.Strategy_Details.goal }}</p>
+
+        <h4>Actions:</h4>
+        <ul>
+            {% for action in result.Strategy_Details.actions %}
+                <li>{{ action }}</li>
+            {% endfor %}
+        </ul>
+
+        <h4>Weekly Plan:</h4>
+        <ul>
+            {% for step in result.Strategy_Details.weekly_plan %}
+                <li>{{ step }}</li>
+            {% endfor %}
+        </ul>
     </div>
 
-    <!-- ================= RISK GAUGE ================= -->
+    <!-- ================= FUZZY EXPLANATION ================= -->
+
+    {% if result.Concept_Explanation %}
+    <div class="card soft-card">
+        <h2>🧠 Fuzzy Reasoning (Concept Clarity)</h2>
+
+        <ul>
+            {% for line in result.Concept_Explanation %}
+                <li>{{ line }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <!-- ================= RISK ================= -->
 
     <div class="card soft-card">
         <h2>⚡ Academic Risk Indicator</h2>
 
-        <div class="risk-gauge">
-            <div class="risk-circle"
-                 style="background: conic-gradient(
-                    {% if result.Risk_Score > 70 %}
-                        #ef4444 {{ result.Risk_Score }}%,
-                    {% elif result.Risk_Score > 40 %}
-                        #f59e0b {{ result.Risk_Score }}%,
-                    {% else %}
-                        #10b981 {{ result.Risk_Score }}%,
-                    {% endif %}
-                    rgba(255,255,255,0.1) 0%
-                 );">
-
-                <div class="risk-inner">
-                    <span class="counter"
-                          data-target="{{ result.Risk_Score }}">0</span>%
-                </div>
-            </div>
-
-            <p class="risk-label">
-                {% if result.Risk_Score > 70 %}
-                    High Academic Risk
-                {% elif result.Risk_Score > 40 %}
-                    Moderate Academic Risk
-                {% else %}
-                    Low Academic Risk
-                {% endif %}
-            </p>
-        </div>
-    </div>
-
-    <!-- ================= STRATEGY SHIFT ================= -->
-
-    <div class="card soft-card">
-        <h2>🔄 Strategy Shift Projection</h2>
-
-        <div class="strategy-shift">
-            <div class="strategy-block">
-                <p class="shift-label">Current</p>
-                <span class="badge orange soft-badge">
-                    {{ result.Strategy }}
-                </span>
-            </div>
-
-            <div class="shift-arrow">➡</div>
-
-            <div class="strategy-block">
-                <p class="shift-label">Projected</p>
-                <span class="badge green soft-badge">
-                    {{ result.Projected_Strategy }}
-                </span>
+        <div class="progress-bar soft-progress">
+            <div class="progress"
+                 style="width: {{ result.Risk_Score }}%;
+                        background:
+                        {% if result.Risk_Score > 70 %}#ef4444
+                        {% elif result.Risk_Score > 40 %}#f59e0b
+                        {% else %}#10b981
+                        {% endif %};">
+                {{ result.Risk_Score }}%
             </div>
         </div>
     </div>
@@ -131,64 +104,38 @@
         <p>Cluster ID: <strong>{{ result.Cluster }}</strong></p>
     </div>
 
-    <!-- ================= TOP ISSUES ================= -->
+    <!-- ================= ACTION PLAN ================= -->
 
-    {% if result.Top_Issues %}
+    {% if result.Action_Plan %}
     <div class="card soft-card">
-        <h2>⚠ Critical Improvement Areas</h2>
+        <h2>📘 Personalized Academic Plan</h2>
 
-        {% for issue in result.Top_Issues %}
-            <div class="issue-row">
-                <span class="issue-name">{{ issue.name }}</span>
-                <div class="severity-bar">
-                    <div class="severity-fill"
-                         style="width: {{ issue.severity }}%;">
-                        {{ issue.severity }}%
-                    </div>
-                </div>
-            </div>
+        {% for section in result.Action_Plan %}
+            <h3>{{ section.title }}</h3>
+            <ul>
+                {% for suggestion in section.suggestions %}
+                    <li>{{ suggestion }}</li>
+                {% endfor %}
+            </ul>
         {% endfor %}
     </div>
     {% endif %}
 
     <!-- ================= AI SUMMARY ================= -->
 
-    {% if result.AI_Summary %}
     <div class="card soft-card">
-        <h2>🧠 AI Advisory Summary</h2>
-        <p class="ai-summary">
-            {{ result.AI_Summary }}
-        </p>
+        <h2>🧠 AI Summary</h2>
+        <p>{{ result.AI_Summary }}</p>
     </div>
-    {% endif %}
 
-    <!-- ================= ACTION PLAN ================= -->
-
-    {% if result.Action_Plan %}
-    <div class="card soft-card">
-        <h2>📘 Personalized Academic Optimization Plan</h2>
-
-        {% for section in result.Action_Plan %}
-            <div class="action-section">
-                <h3>{{ section.title }}</h3>
-                <ul>
-                    {% for suggestion in section.suggestions %}
-                        <li>{{ suggestion }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-
-    <!-- ================= RADAR CHART ================= -->
+    <!-- ================= RADAR ================= -->
 
     <div class="card soft-card">
-        <h2>📈 Academic Profile Radar</h2>
+        <h2>📈 Academic Profile</h2>
         <canvas id="radarChart"></canvas>
     </div>
 
-    <!-- ================= PDF DOWNLOAD ================= -->
+    <!-- ================= PDF ================= -->
 
     <div class="card soft-card center">
         <form action="/download_report" method="post">
@@ -199,21 +146,15 @@
             <input type="hidden" name="strategy" value="{{ result.Strategy }}">
             <input type="hidden" name="summary" value="{{ result.AI_Summary }}">
 
-            <button type="submit" class="btn-primary soft-compute-btn">
-                📄 Download PDF Report
-            </button>
+            <button type="submit" class="btn-primary">📄 Download Report</button>
         </form>
     </div>
 
     <div class="center">
-        <a href="/" class="btn-secondary soft-secondary">
-            Analyze Another Student
-        </a>
+        <a href="/" class="btn-secondary">Analyze Another Student</a>
     </div>
 
 </div>
-
-<!-- ================= RADAR SCRIPT ================= -->
 
 <script>
 const ctx = document.getElementById('radarChart');
@@ -231,7 +172,7 @@ new Chart(ctx, {
             "Consistency"
         ],
         datasets: [{
-            label: 'Academic Profile',
+            label: 'Profile',
             data: [
                 {{ result.Feature_Data.Attendance_Rate }},
                 {{ result.Feature_Data.Concept_Clarity }},
@@ -240,54 +181,9 @@ new Chart(ctx, {
                 {{ result.Feature_Data.Assignment_Quality }},
                 {{ result.Feature_Data.Time_Management }},
                 {{ result.Feature_Data.Learning_Consistency }}
-            ],
-            backgroundColor: 'rgba(99, 102, 241, 0.3)',
-            borderColor: 'rgba(99, 102, 241, 1)',
-            borderWidth: 2
+            ]
         }]
-    },
-    options: {
-        scales: {
-            r: {
-                angleLines: { color: "rgba(255,255,255,0.2)" },
-                grid: { color: "rgba(255,255,255,0.2)" },
-                pointLabels: { color: "white" },
-                ticks: {
-                    backdropColor: "transparent",
-                    color: "white"
-                }
-            }
-        },
-        plugins: {
-            legend: { labels: { color: "white" } }
-        }
     }
-});
-</script>
-
-<!-- ================= COUNTER ANIMATION ================= -->
-
-<script>
-const counters = document.querySelectorAll('.counter');
-
-counters.forEach(counter => {
-    counter.innerText = '0';
-    const target = +counter.getAttribute('data-target');
-    const duration = 1500;
-    const increment = target / (duration / 16);
-    let count = 0;
-
-    function updateCounter() {
-        count += increment;
-        if (count < target) {
-            counter.innerText = Math.floor(count);
-            requestAnimationFrame(updateCounter);
-        } else {
-            counter.innerText = target;
-        }
-    }
-
-    updateCounter();
 });
 </script>
 
