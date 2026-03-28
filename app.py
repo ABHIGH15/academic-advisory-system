@@ -17,31 +17,42 @@ def home():
     return render_template("index.html")
 
 # --------------------------------------------------
-# Analyze Route
+# Analyze Route (SAFE + DEBUG ENABLED)
 # --------------------------------------------------
 
 @app.route("/analyze", methods=["POST"])
 def analyze():
 
-    # Collect NEW realistic form inputs
-    form_input = {
-        "attendance": request.form["attendance"],
-        "quiz_avg": request.form["quiz_avg"],
-        "internal": request.form["internal"],
-        "study_hours": request.form["study_hours"],
-        "study_days": request.form["study_days"],
-        "practice_per_week": request.form["practice_per_week"],
-        "assignment_delay": request.form["assignment_delay"],
-        "sleep_hours": request.form["sleep_hours"],
-        "screen_time": request.form["screen_time"],
-        "confidence": request.form["confidence"],
-        "anxiety": request.form["anxiety"]
-    }
+    try:
+        # ✅ Safe input handling (no crash if missing)
+        form_input = {
+            "attendance": float(request.form.get("attendance", 0)),
+            "quiz_avg": float(request.form.get("quiz_avg", 0)),
+            "internal": float(request.form.get("internal", 0)),
+            "study_hours": float(request.form.get("study_hours", 0)),
+            "study_days": float(request.form.get("study_days", 0)),
+            "practice_per_week": float(request.form.get("practice_per_week", 0)),
+            "assignment_delay": float(request.form.get("assignment_delay", 0)),
+            "sleep_hours": float(request.form.get("sleep_hours", 0)),
+            "screen_time": float(request.form.get("screen_time", 0)),
+            "confidence": request.form.get("confidence", "medium"),
+            "anxiety": request.form.get("anxiety", "medium")
+        }
 
-    # Run full hybrid soft computing engine
-    result = analyze_student(form_input)
+        # 🔥 Debug print (visible in Render logs)
+        print("FORM INPUT:", form_input)
 
-    return render_template("result.html", result=result)
+        # Run engine
+        result = analyze_student(form_input)
+
+        return render_template("result.html", result=result)
+
+    except Exception as e:
+        # 🔥 Show exact error (VERY IMPORTANT for debugging)
+        return f"""
+        <h1>❌ Internal Server Error</h1>
+        <pre>{str(e)}</pre>
+        """
 
 # --------------------------------------------------
 # Download PDF Report
@@ -50,41 +61,48 @@ def analyze():
 @app.route("/download_report", methods=["POST"])
 def download_report():
 
-    original = request.form.get("original")
-    projected = request.form.get("projected")
-    improvement = request.form.get("improvement")
-    risk = request.form.get("risk")
-    strategy = request.form.get("strategy")
-    summary = request.form.get("summary")
+    try:
+        # Get values safely
+        effectiveness = request.form.get("effectiveness", "N/A")
+        risk = request.form.get("risk", "N/A")
+        strategy = request.form.get("strategy", "N/A")
+        summary = request.form.get("summary", "No summary available")
 
-    buffer = io.BytesIO()
-    doc = SimpleDocTemplate(buffer, pagesize=letter)
-    styles = getSampleStyleSheet()
-    elements = []
+        buffer = io.BytesIO()
+        doc = SimpleDocTemplate(buffer, pagesize=letter)
+        styles = getSampleStyleSheet()
+        elements = []
 
-    elements.append(Paragraph("Academic Optimization Report", styles["Title"]))
-    elements.append(Spacer(1, 20))
+        # Title
+        elements.append(Paragraph("Academic Intelligence Report", styles["Title"]))
+        elements.append(Spacer(1, 20))
 
-    elements.append(Paragraph(f"Current Effectiveness: {original}%", styles["Normal"]))
-    elements.append(Paragraph(f"Projected Effectiveness: {projected}%", styles["Normal"]))
-    elements.append(Paragraph(f"Improvement Potential: {improvement}%", styles["Normal"]))
-    elements.append(Paragraph(f"Academic Risk Score: {risk}%", styles["Normal"]))
-    elements.append(Paragraph(f"Recommended Strategy: {strategy}", styles["Normal"]))
-    elements.append(Spacer(1, 20))
+        # Core Metrics
+        elements.append(Paragraph(f"Effectiveness: {effectiveness}%", styles["Normal"]))
+        elements.append(Paragraph(f"Risk Score: {risk}%", styles["Normal"]))
+        elements.append(Paragraph(f"Strategy: {strategy}", styles["Normal"]))
+        elements.append(Spacer(1, 20))
 
-    elements.append(Paragraph("AI Advisory Summary:", styles["Heading2"]))
-    elements.append(Spacer(1, 10))
-    elements.append(Paragraph(summary, styles["Normal"]))
+        # Summary
+        elements.append(Paragraph("Summary:", styles["Heading2"]))
+        elements.append(Spacer(1, 10))
+        elements.append(Paragraph(summary, styles["Normal"]))
 
-    doc.build(elements)
-    buffer.seek(0)
+        doc.build(elements)
+        buffer.seek(0)
 
-    return send_file(
-        buffer,
-        as_attachment=True,
-        download_name="Academic_Optimization_Report.pdf",
-        mimetype="application/pdf"
-    )
+        return send_file(
+            buffer,
+            as_attachment=True,
+            download_name="Academic_Report.pdf",
+            mimetype="application/pdf"
+        )
+
+    except Exception as e:
+        return f"""
+        <h1>❌ PDF Generation Error</h1>
+        <pre>{str(e)}</pre>
+        """
 
 # --------------------------------------------------
 # Run App
