@@ -77,18 +77,15 @@ def fuzzy_concept_clarity(quiz, confidence, anxiety, explain=False):
     c = confidence_membership(confidence)
     a = anxiety_membership(anxiety)
 
-    # -------- RULE BASE --------
-    r1 = min(q["high"], c["high"], a["low"])      # High
-    r2 = min(q["medium"], c["medium"])            # Medium
-    r3 = max(q["low"], a["high"])                 # Low
+    r1 = min(q["high"], c["high"], a["low"])
+    r2 = min(q["medium"], c["medium"])
+    r3 = max(q["low"], a["high"])
 
-    # -------- DEFUZZIFICATION --------
     numerator = r1 * 90 + r2 * 60 + r3 * 30
     denominator = r1 + r2 + r3
 
     score = numerator / denominator if denominator != 0 else 50
 
-    # -------- EXPLANATION --------
     if explain:
         explanation = []
 
@@ -172,64 +169,65 @@ def compute_motivation(attendance, practice_per_week, confidence):
     return clamp(motivation)
 
 # -------------------------------------------------
-# Personalized Intervention Engine
+# 🔥 FULL STRATEGY SYSTEM (NEW)
 # -------------------------------------------------
 
-def generate_action_plan(concept, consistency, time_mgmt, cognitive_load, motivation):
+def assign_strategy(score, cluster):
 
-    actions = []
-
-    if concept < 50:
-        actions.append({
-            "title": "Improve Concept Clarity",
-            "suggestions": [
-                "Use Retrieval Practice daily.",
-                "Apply Spaced Repetition.",
-                "Teach concepts using Feynman Technique."
+    if score < 40:
+        return {
+            "name": "Reinforcement Strategy",
+            "definition": "Student lacks foundational understanding and consistency.",
+            "goal": "Build strong academic fundamentals.",
+            "actions": [
+                "Revise core concepts daily",
+                "Solve minimum 20 practice problems per week",
+                "Attend doubt-solving sessions",
+                "Focus on understanding over memorization"
+            ],
+            "weekly_plan": [
+                "Day 1-3: Concept learning",
+                "Day 4-5: Practice problems",
+                "Day 6: Revision",
+                "Day 7: Self-test"
             ]
-        })
+        }
 
-    if consistency < 60:
-        actions.append({
-            "title": "Enhance Learning Consistency",
-            "suggestions": [
-                "Fix daily study time.",
-                "Follow 90-minute sessions.",
-                "Maintain weekly revision plan."
+    elif score < 70:
+        return {
+            "name": "Structured Growth Strategy",
+            "definition": "Student has moderate performance but lacks consistency.",
+            "goal": "Improve stability and efficiency in learning.",
+            "actions": [
+                "Follow fixed study schedule",
+                "Practice active recall",
+                "Take 2 mock tests per month",
+                "Track weekly performance"
+            ],
+            "weekly_plan": [
+                "5 days focused study",
+                "1 day mock test",
+                "1 day revision"
             ]
-        })
+        }
 
-    if time_mgmt < 60:
-        actions.append({
-            "title": "Optimize Time Management",
-            "suggestions": [
-                "Use Deep Work blocks.",
-                "Apply time blocking.",
-                "Reduce unnecessary screen usage."
+    else:
+        return {
+            "name": "Advanced Enrichment Strategy",
+            "definition": "Student is performing well and ready for advanced challenges.",
+            "goal": "Maximize academic excellence.",
+            "actions": [
+                "Solve advanced-level problems",
+                "Work on projects/research",
+                "Participate in competitions",
+                "Mentor peers"
+            ],
+            "weekly_plan": [
+                "Advanced problem solving",
+                "Project work",
+                "Peer teaching sessions"
             ]
-        })
-
-    if cognitive_load > 60:
-        actions.append({
-            "title": "Reduce Cognitive Load",
-            "suggestions": [
-                "Sleep 7–8 hours.",
-                "Practice breathing techniques.",
-                "Take regular breaks."
-            ]
-        })
-
-    if motivation < 60:
-        actions.append({
-            "title": "Boost Motivation",
-            "suggestions": [
-                "Set weekly goals.",
-                "Track daily progress.",
-                "Reward milestones."
-            ]
-        })
-
-    return actions
+        }
 
 # -------------------------------------------------
 # Core Prediction
@@ -239,15 +237,6 @@ def predict_effectiveness(input_data):
     df = pd.DataFrame([input_data], columns=feature_columns)
     scaled = scaler.transform(df)
     return ann_model.predict(scaled)[0]
-
-
-def assign_strategy(score):
-    if score < 40:
-        return "Reinforcement Strategy"
-    elif score < 70:
-        return "Structured Growth Strategy"
-    else:
-        return "Advanced Enrichment Strategy"
 
 # -------------------------------------------------
 # Improvement Simulation
@@ -290,7 +279,6 @@ def analyze_student(form_input):
     confidence = form_input["confidence"]
     anxiety = form_input["anxiety"]
 
-    # 🔥 FUZZY + EXPLAINABLE
     concept, concept_explanation = fuzzy_concept_clarity(
         quiz_avg, confidence, anxiety, explain=True
     )
@@ -319,52 +307,28 @@ def analyze_student(form_input):
         scaler.transform(pd.DataFrame([ann_input], columns=feature_columns))
     )[0]
 
-    strategy = assign_strategy(effectiveness)
+    strategy = assign_strategy(effectiveness, cluster)
+
     simulation = simulate_improvement(ann_input)
-    projected_strategy = assign_strategy(simulation["Projected"])
+    projected_strategy = assign_strategy(simulation["Projected"], cluster)
 
     risk_score = 80 if cluster == 2 else 60 if cluster == 0 else 40 if cluster == 3 else 20
 
-    feature_values = {
-        "Concept Clarity": concept,
-        "Learning Consistency": consistency,
-        "Time Management": time_mgmt,
-        "Practice Frequency": practice_score,
-        "Motivation Index": motivation
-    }
-
-    sorted_weak = sorted(feature_values.items(), key=lambda x: x[1])[:3]
-
-    top_issues = [
-        {"name": name, "severity": round(100 - value, 2)}
-        for name, value in sorted_weak
-    ]
-
-    action_plan = generate_action_plan(
-        concept,
-        consistency,
-        time_mgmt,
-        cognitive_load,
-        motivation
-    )
-
     summary = f"""
     The student demonstrates a predicted academic effectiveness of {round(effectiveness,2)}%.
-    Primary improvement areas include {', '.join([issue['name'] for issue in top_issues])}.
     Cognitive load is estimated at {round(cognitive_load,2)}%.
-    Recommended approach: {strategy}.
+    Recommended approach: {strategy['name']}.
     """
 
     return {
         "Effectiveness": round(effectiveness, 2),
         "Cluster": int(cluster),
-        "Strategy": strategy,
+        "Strategy": strategy["name"],
+        "Strategy_Details": strategy,
         "Simulation": simulation,
-        "Projected_Strategy": projected_strategy,
+        "Projected_Strategy": projected_strategy["name"],
         "Risk_Score": risk_score,
-        "Top_Issues": top_issues,
         "AI_Summary": summary.strip(),
         "Feature_Data": ann_input,
-        "Action_Plan": action_plan,
-        "Concept_Explanation": concept_explanation   # 🔥 NEW
+        "Concept_Explanation": concept_explanation
     }
