@@ -31,7 +31,7 @@ def clamp(value):
     return max(0, min(100, value))
 
 # -------------------------------------------------
-# 🔥 FUZZY LOGIC SYSTEM (NEW)
+# 🔥 FUZZY LOGIC SYSTEM (WITH EXPLANATION)
 # -------------------------------------------------
 
 def triangular(x, a, b, c):
@@ -71,30 +71,45 @@ def anxiety_membership(anx):
     return mapping[anx.lower()]
 
 
-def fuzzy_concept_clarity(quiz, confidence, anxiety):
+def fuzzy_concept_clarity(quiz, confidence, anxiety, explain=False):
 
     q = quiz_membership(quiz)
     c = confidence_membership(confidence)
     a = anxiety_membership(anxiety)
 
     # -------- RULE BASE --------
-    # R1: High clarity
-    r1 = min(q["high"], c["high"], a["low"])
-
-    # R2: Medium clarity
-    r2 = min(q["medium"], c["medium"])
-
-    # R3: Low clarity
-    r3 = max(q["low"], a["high"])
+    r1 = min(q["high"], c["high"], a["low"])      # High
+    r2 = min(q["medium"], c["medium"])            # Medium
+    r3 = max(q["low"], a["high"])                 # Low
 
     # -------- DEFUZZIFICATION --------
     numerator = r1 * 90 + r2 * 60 + r3 * 30
     denominator = r1 + r2 + r3
 
-    if denominator == 0:
-        return 50
+    score = numerator / denominator if denominator != 0 else 50
 
-    return numerator / denominator
+    # -------- EXPLANATION --------
+    if explain:
+        explanation = []
+
+        q_max = max(q, key=q.get)
+        c_max = max(c, key=c.get)
+        a_max = max(a, key=a.get)
+
+        explanation.append(f"Quiz level is {q_max.upper()} ({round(q[q_max],2)})")
+        explanation.append(f"Confidence is {c_max.upper()} ({round(c[c_max],2)})")
+        explanation.append(f"Anxiety is {a_max.upper()} ({round(a[a_max],2)})")
+
+        if r3 > r1 and r3 > r2:
+            explanation.append("High anxiety or low quiz performance is reducing clarity.")
+        elif r1 > r2:
+            explanation.append("Strong quiz performance and confidence improve clarity.")
+        else:
+            explanation.append("Moderate performance results in balanced clarity.")
+
+        return score, explanation
+
+    return score
 
 # -------------------------------------------------
 # Derived Soft Variable Computation
@@ -275,8 +290,10 @@ def analyze_student(form_input):
     confidence = form_input["confidence"]
     anxiety = form_input["anxiety"]
 
-    # 🔥 FUZZY LOGIC USED HERE
-    concept = fuzzy_concept_clarity(quiz_avg, confidence, anxiety)
+    # 🔥 FUZZY + EXPLAINABLE
+    concept, concept_explanation = fuzzy_concept_clarity(
+        quiz_avg, confidence, anxiety, explain=True
+    )
 
     consistency = compute_learning_consistency(study_days, study_hours, sleep_hours)
     time_mgmt = compute_time_management(study_hours, screen_time, delay_days)
@@ -348,5 +365,6 @@ def analyze_student(form_input):
         "Top_Issues": top_issues,
         "AI_Summary": summary.strip(),
         "Feature_Data": ann_input,
-        "Action_Plan": action_plan
+        "Action_Plan": action_plan,
+        "Concept_Explanation": concept_explanation   # 🔥 NEW
     }
