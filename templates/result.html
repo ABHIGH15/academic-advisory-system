@@ -70,10 +70,26 @@
     {% if result.Concept_Explanation %}
     <div class="card soft-card">
         <h2>🧠 Fuzzy Reasoning (Concept Clarity)</h2>
-
         <ul>
             {% for line in result.Concept_Explanation %}
                 <li>{{ line }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <!-- ================= OPTIMIZATION (🔥 NEW FEATURE) ================= -->
+
+    {% if result.Optimization_Plan %}
+    <div class="card soft-card">
+        <h2>🚀 Optimization Plan (Reach Target Performance)</h2>
+
+        <ul>
+            {% for step in result.Optimization_Plan %}
+                <li>
+                    Improve <strong>{{ step.feature.replace('_',' ') }}</strong>
+                    to <strong>{{ step.value }}</strong>
+                </li>
             {% endfor %}
         </ul>
     </div>
@@ -104,29 +120,14 @@
         <p>Cluster ID: <strong>{{ result.Cluster }}</strong></p>
     </div>
 
-    <!-- ================= ACTION PLAN ================= -->
-
-    {% if result.Action_Plan %}
-    <div class="card soft-card">
-        <h2>📘 Personalized Academic Plan</h2>
-
-        {% for section in result.Action_Plan %}
-            <h3>{{ section.title }}</h3>
-            <ul>
-                {% for suggestion in section.suggestions %}
-                    <li>{{ suggestion }}</li>
-                {% endfor %}
-            </ul>
-        {% endfor %}
-    </div>
-    {% endif %}
-
     <!-- ================= AI SUMMARY ================= -->
 
+    {% if result.AI_Summary %}
     <div class="card soft-card">
         <h2>🧠 AI Summary</h2>
         <p>{{ result.AI_Summary }}</p>
     </div>
+    {% endif %}
 
     <!-- ================= RADAR ================= -->
 
@@ -146,15 +147,21 @@
             <input type="hidden" name="strategy" value="{{ result.Strategy }}">
             <input type="hidden" name="summary" value="{{ result.AI_Summary }}">
 
-            <button type="submit" class="btn-primary">📄 Download Report</button>
+            <button type="submit" class="btn-primary">
+                📄 Download Report
+            </button>
         </form>
     </div>
 
     <div class="center">
-        <a href="/" class="btn-secondary">Analyze Another Student</a>
+        <a href="/" class="btn-secondary">
+            Analyze Another Student
+        </a>
     </div>
 
 </div>
+
+<!-- ================= RADAR SCRIPT ================= -->
 
 <script>
 const ctx = document.getElementById('radarChart');
@@ -172,7 +179,7 @@ new Chart(ctx, {
             "Consistency"
         ],
         datasets: [{
-            label: 'Profile',
+            label: 'Academic Profile',
             data: [
                 {{ result.Feature_Data.Attendance_Rate }},
                 {{ result.Feature_Data.Concept_Clarity }},
@@ -181,8 +188,24 @@ new Chart(ctx, {
                 {{ result.Feature_Data.Assignment_Quality }},
                 {{ result.Feature_Data.Time_Management }},
                 {{ result.Feature_Data.Learning_Consistency }}
-            ]
+            ],
+            backgroundColor: 'rgba(99,102,241,0.3)',
+            borderColor: 'rgba(99,102,241,1)',
+            borderWidth: 2
         }]
+    },
+    options: {
+        scales: {
+            r: {
+                angleLines: { color: "rgba(255,255,255,0.2)" },
+                grid: { color: "rgba(255,255,255,0.2)" },
+                pointLabels: { color: "white" },
+                ticks: { backdropColor: "transparent", color: "white" }
+            }
+        },
+        plugins: {
+            legend: { labels: { color: "white" } }
+        }
     }
 });
 </script>
