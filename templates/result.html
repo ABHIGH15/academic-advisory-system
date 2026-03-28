@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Academic Optimization Report</title>
+    <title>Academic Intelligence Report</title>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -14,62 +14,34 @@
 <body class="soft-report-bg">
 <div class="container soft-glass">
 
-    <h1 class="soft-title">📊 Academic Optimization Report</h1>
+    <h1 class="soft-title">🧠 Academic Intelligence Report</h1>
 
     <!-- ================= EFFECTIVENESS ================= -->
 
     <div class="card soft-card">
-        <h2>Current Effectiveness</h2>
+        <h2>📊 Your Current Performance</h2>
+        <p>This score represents your overall academic effectiveness:</p>
+
         <div class="progress-bar soft-progress">
-            <div class="progress soft-fill-progress" style="width: {{ result.Simulation.Original }}%;">
-                {{ result.Simulation.Original }}%
+            <div class="progress soft-fill-progress"
+                 style="width: {{ result.Effectiveness }}%;">
+                {{ result.Effectiveness }}%
             </div>
         </div>
-    </div>
-
-    <div class="card soft-card">
-        <h2>Projected Effectiveness</h2>
-        <div class="progress-bar soft-progress blue-soft">
-            <div class="progress soft-blue-progress" style="width: {{ result.Simulation.Projected }}%;">
-                {{ result.Simulation.Projected }}%
-            </div>
-        </div>
-
-        <p class="improvement soft-gain">
-            Improvement Potential: +{{ result.Simulation.Improvement_Percent }}%
-        </p>
     </div>
 
     <!-- ================= STRATEGY ================= -->
 
     <div class="card soft-card">
-        <h2>🎯 Strategy Recommendation</h2>
-
-        <h3>{{ result.Strategy_Details.name }}</h3>
-
-        <p><strong>Definition:</strong> {{ result.Strategy_Details.definition }}</p>
-        <p><strong>Goal:</strong> {{ result.Strategy_Details.goal }}</p>
-
-        <h4>Actions:</h4>
-        <ul>
-            {% for action in result.Strategy_Details.actions %}
-                <li>{{ action }}</li>
-            {% endfor %}
-        </ul>
-
-        <h4>Weekly Plan:</h4>
-        <ul>
-            {% for step in result.Strategy_Details.weekly_plan %}
-                <li>{{ step }}</li>
-            {% endfor %}
-        </ul>
+        <h2>🎯 Recommended Strategy</h2>
+        <p><strong>{{ result.Strategy }}</strong></p>
     </div>
 
-    <!-- ================= FUZZY EXPLANATION ================= -->
+    <!-- ================= CONCEPT EXPLANATION ================= -->
 
     {% if result.Concept_Explanation %}
     <div class="card soft-card">
-        <h2>🧠 Fuzzy Reasoning (Concept Clarity)</h2>
+        <h2>🧠 Why Your Concept Clarity is Like This</h2>
         <ul>
             {% for line in result.Concept_Explanation %}
                 <li>{{ line }}</li>
@@ -78,27 +50,17 @@
     </div>
     {% endif %}
 
-    <!-- ================= OPTIMIZATION (🔥 NEW FEATURE) ================= -->
+    <!-- ================= CLUSTER INTERPRETATION ================= -->
 
-    {% if result.Optimization_Plan %}
     <div class="card soft-card">
-        <h2>🚀 Optimization Plan (Reach Target Performance)</h2>
-
-        <ul>
-            {% for step in result.Optimization_Plan %}
-                <li>
-                    Improve <strong>{{ step.feature.replace('_',' ') }}</strong>
-                    to <strong>{{ step.value }}</strong>
-                </li>
-            {% endfor %}
-        </ul>
+        <h2>🧬 Your Academic Profile</h2>
+        <p>{{ result.Cluster_Insight }}</p>
     </div>
-    {% endif %}
 
     <!-- ================= RISK ================= -->
 
     <div class="card soft-card">
-        <h2>⚡ Academic Risk Indicator</h2>
+        <h2>⚠ Academic Risk Analysis</h2>
 
         <div class="progress-bar soft-progress">
             <div class="progress"
@@ -111,28 +73,49 @@
                 {{ result.Risk_Score }}%
             </div>
         </div>
+
+        <p style="margin-top:15px;">
+            {{ result.Risk_Reason }}
+        </p>
     </div>
 
-    <!-- ================= CLUSTER ================= -->
+    <!-- ================= OPTIMIZATION ================= -->
 
+    {% if result.Optimization_Insights %}
     <div class="card soft-card">
-        <h2>🧬 Cluster Profile</h2>
-        <p>Cluster ID: <strong>{{ result.Cluster }}</strong></p>
+        <h2>🚀 Exact Improvements Needed</h2>
+
+        <ul>
+            {% for step in result.Optimization_Insights %}
+                <li>
+                    Increase <strong>{{ step.feature.replace('_',' ') }}</strong>
+                    from <strong>{{ step.from }}</strong>
+                    → <strong>{{ step.to }}</strong>
+                    (Improve by {{ step.change }})
+                </li>
+            {% endfor %}
+        </ul>
     </div>
+    {% endif %}
 
-    <!-- ================= AI SUMMARY ================= -->
+    <!-- ================= SMART TIPS ================= -->
 
-    {% if result.AI_Summary %}
+    {% if result.Smart_Tips %}
     <div class="card soft-card">
-        <h2>🧠 AI Summary</h2>
-        <p>{{ result.AI_Summary }}</p>
+        <h2>💡 Smart Tips (How to Improve)</h2>
+
+        <ul>
+            {% for tip in result.Smart_Tips %}
+                <li>{{ tip }}</li>
+            {% endfor %}
+        </ul>
     </div>
     {% endif %}
 
     <!-- ================= RADAR ================= -->
 
     <div class="card soft-card">
-        <h2>📈 Academic Profile</h2>
+        <h2>📈 Your Academic Profile</h2>
         <canvas id="radarChart"></canvas>
     </div>
 
@@ -140,12 +123,10 @@
 
     <div class="card soft-card center">
         <form action="/download_report" method="post">
-            <input type="hidden" name="original" value="{{ result.Simulation.Original }}">
-            <input type="hidden" name="projected" value="{{ result.Simulation.Projected }}">
-            <input type="hidden" name="improvement" value="{{ result.Simulation.Improvement_Percent }}">
+            <input type="hidden" name="effectiveness" value="{{ result.Effectiveness }}">
             <input type="hidden" name="risk" value="{{ result.Risk_Score }}">
             <input type="hidden" name="strategy" value="{{ result.Strategy }}">
-            <input type="hidden" name="summary" value="{{ result.AI_Summary }}">
+            <input type="hidden" name="summary" value="{{ result.Cluster_Insight }}">
 
             <button type="submit" class="btn-primary">
                 📄 Download Report
@@ -171,7 +152,7 @@ new Chart(ctx, {
     data: {
         labels: [
             "Attendance",
-            "Concept Clarity",
+            "Concept",
             "Practice",
             "Internal",
             "Assignment",
