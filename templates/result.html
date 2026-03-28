@@ -17,132 +17,112 @@
     <h1 class="soft-title">🧠 Academic Intelligence Report</h1>
 
     <!-- ================= EFFECTIVENESS ================= -->
-
     <div class="card soft-card">
         <h2>📊 Your Current Performance</h2>
-
         <div class="progress-bar soft-progress">
-            <div class="progress soft-fill-progress"
-                 style="width: {{ result.Effectiveness }}%;">
+            <div class="progress soft-fill-progress" style="width: {{ result.Effectiveness }}%;">
                 {{ result.Effectiveness }}%
             </div>
         </div>
     </div>
 
-    <!-- ================= STRATEGY ================= -->
+    <!-- ================= LEVEL ================= -->
+    <div class="card soft-card">
+        <h2>🎮 Your Level</h2>
+        <p><strong>{{ result.Student_Level }}</strong></p>
+    </div>
 
+    <!-- ================= STRATEGY ================= -->
     <div class="card soft-card">
         <h2>🎯 Recommended Strategy</h2>
         <p><strong>{{ result.Strategy }}</strong></p>
     </div>
 
-    <!-- ================= ⭐ PRIORITY ================= -->
-
-    {% if result.Priority_Areas %}
+    <!-- ================= PRIORITY ================= -->
     <div class="card soft-card">
         <h2>⭐ Top Priority Areas</h2>
-
         <ul>
-            {% for item in result.Priority_Areas %}
-                <li>
-                    <strong>{{ item.feature.replace('_',' ') }}</strong>
-                    (Current: {{ item.value }})
-                </li>
+            {% for name, value in result.Priority_Areas %}
+                <li><strong>{{ name.replace('_',' ') }}</strong> → {{ value }}</li>
             {% endfor %}
         </ul>
-
-        <p style="margin-top:10px;">
-            👉 Focus on these FIRST for maximum improvement
-        </p>
     </div>
-    {% endif %}
 
-    <!-- ================= 🎯 TARGET PLAN ================= -->
-
-    {% if result.Target_Plan %}
+    <!-- ================= TARGET ================= -->
     <div class="card soft-card">
-        <h2>🎯 Target Plan (Reach High Performance)</h2>
-
+        <h2>🎯 Target Plan</h2>
         <ul>
             {% for step in result.Target_Plan %}
                 <li>
                     Increase <strong>{{ step.feature.replace('_',' ') }}</strong>
-                    to <strong>{{ step.target }}</strong>
+                    to {{ step.target }}
                 </li>
             {% endfor %}
         </ul>
-
-        <p style="margin-top:10px;">
-            👉 Achieving these targets can significantly boost your score
-        </p>
     </div>
-    {% endif %}
 
-    <!-- ================= 🧠 COGNITIVE ================= -->
-
+    <!-- ================= STUDY PLAN ================= -->
     <div class="card soft-card">
-        <h2>🧠 Cognitive Load Analysis</h2>
+        <h2>📅 Weekly Study Plan</h2>
+        <ul>
+            {% for item in result.Study_Plan %}
+                <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+    </div>
 
+    <!-- ================= EFFICIENCY ================= -->
+    <div class="card soft-card">
+        <h2>⚡ Study Efficiency</h2>
+        <p>{{ result.Efficiency_Insight }}</p>
+    </div>
+
+    <!-- ================= HIDDEN ================= -->
+    <div class="card soft-card">
+        <h2>💡 Hidden Insight</h2>
+        <p>{{ result.Hidden_Insight }}</p>
+    </div>
+
+    <!-- ================= COGNITIVE ================= -->
+    <div class="card soft-card">
+        <h2>🧠 Cognitive Load</h2>
         <div class="progress-bar soft-progress">
-            <div class="progress"
-                 style="width: {{ result.Cognitive_Load }}%; background:#8b5cf6;">
+            <div class="progress" style="width: {{ result.Cognitive_Load }}%; background:#8b5cf6;">
                 {{ result.Cognitive_Load }}%
             </div>
         </div>
-
-        <p style="margin-top:10px;">
-            {{ result.Cognitive_Insight }}
-        </p>
+        <p>{{ result.Cognitive_Insight }}</p>
     </div>
 
     <!-- ================= CONCEPT ================= -->
-
-    {% if result.Concept_Explanation %}
     <div class="card soft-card">
-        <h2>🧠 Concept Clarity Analysis</h2>
+        <h2>🧠 Concept Analysis</h2>
         <ul>
             {% for line in result.Concept_Explanation %}
                 <li>{{ line }}</li>
             {% endfor %}
         </ul>
     </div>
-    {% endif %}
 
     <!-- ================= CLUSTER ================= -->
-
     <div class="card soft-card">
         <h2>🧬 Academic Profile</h2>
         <p>{{ result.Cluster_Insight }}</p>
     </div>
 
     <!-- ================= RISK ================= -->
-
     <div class="card soft-card">
         <h2>⚠ Academic Risk</h2>
-
         <div class="progress-bar soft-progress">
-            <div class="progress"
-                 style="width: {{ result.Risk_Score }}%;
-                        background:
-                        {% if result.Risk_Score > 70 %}#ef4444
-                        {% elif result.Risk_Score > 40 %}#f59e0b
-                        {% else %}#10b981
-                        {% endif %};">
+            <div class="progress" style="width: {{ result.Risk_Score }}%;">
                 {{ result.Risk_Score }}%
             </div>
         </div>
-
-        <p style="margin-top:10px;">
-            {{ result.Risk_Reason }}
-        </p>
     </div>
 
-    <!-- ================= OPTIMIZATION ================= -->
-
-    {% if result.Optimization_Insights %}
+    <!-- ================= IMPROVEMENT ================= -->
     <div class="card soft-card">
         <h2>🚀 Improvement Plan</h2>
-
         <ul>
             {% for step in result.Optimization_Insights %}
                 <li>
@@ -152,31 +132,24 @@
             {% endfor %}
         </ul>
     </div>
-    {% endif %}
 
     <!-- ================= TIPS ================= -->
-
-    {% if result.Smart_Tips %}
     <div class="card soft-card">
         <h2>💡 Smart Tips</h2>
-
         <ul>
             {% for tip in result.Smart_Tips %}
                 <li>{{ tip }}</li>
             {% endfor %}
         </ul>
     </div>
-    {% endif %}
 
     <!-- ================= RADAR ================= -->
-
     <div class="card soft-card">
         <h2>📈 Academic Profile</h2>
         <canvas id="radarChart"></canvas>
     </div>
 
-    <!-- ================= PDF ================= -->
-
+    <!-- ================= ACTION ================= -->
     <div class="card soft-card center">
         <form action="/download_report" method="post">
             <input type="hidden" name="effectiveness" value="{{ result.Effectiveness }}">
@@ -204,10 +177,7 @@ const ctx = document.getElementById('radarChart');
 new Chart(ctx, {
     type: 'radar',
     data: {
-        labels: [
-            "Attendance","Concept","Practice","Internal",
-            "Assignment","Time Mgmt","Consistency"
-        ],
+        labels: ["Attendance","Concept","Practice","Internal","Assignment","Time Mgmt","Consistency"],
         datasets: [{
             label: 'Academic Profile',
             data: [
