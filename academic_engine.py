@@ -31,24 +31,74 @@ def clamp(value):
     return max(0, min(100, value))
 
 # -------------------------------------------------
-# Derived Soft Variable Computation
+# 🔥 FUZZY LOGIC SYSTEM (NEW)
 # -------------------------------------------------
 
-def compute_concept_clarity(quiz_avg, confidence, anxiety):
-    confidence_map = {"low": 30, "medium": 60, "high": 90}
-    anxiety_map = {"low": 20, "medium": 50, "high": 80}
+def triangular(x, a, b, c):
+    if x <= a or x >= c:
+        return 0
+    elif x == b:
+        return 1
+    elif x < b:
+        return (x - a) / (b - a)
+    else:
+        return (c - x) / (c - b)
 
-    confidence_score = confidence_map.get(confidence.lower(), 50)
-    anxiety_score = anxiety_map.get(anxiety.lower(), 50)
 
-    clarity = (
-        0.6 * quiz_avg +
-        0.25 * confidence_score -
-        0.15 * anxiety_score
-    )
+def quiz_membership(quiz):
+    return {
+        "low": triangular(quiz, 0, 0, 50),
+        "medium": triangular(quiz, 30, 50, 70),
+        "high": triangular(quiz, 60, 80, 100)
+    }
 
-    return clamp(clarity)
 
+def confidence_membership(conf):
+    mapping = {
+        "low": {"low": 1, "medium": 0, "high": 0},
+        "medium": {"low": 0, "medium": 1, "high": 0},
+        "high": {"low": 0, "medium": 0, "high": 1}
+    }
+    return mapping[conf.lower()]
+
+
+def anxiety_membership(anx):
+    mapping = {
+        "low": {"low": 1, "medium": 0, "high": 0},
+        "medium": {"low": 0, "medium": 1, "high": 0},
+        "high": {"low": 0, "medium": 0, "high": 1}
+    }
+    return mapping[anx.lower()]
+
+
+def fuzzy_concept_clarity(quiz, confidence, anxiety):
+
+    q = quiz_membership(quiz)
+    c = confidence_membership(confidence)
+    a = anxiety_membership(anxiety)
+
+    # -------- RULE BASE --------
+    # R1: High clarity
+    r1 = min(q["high"], c["high"], a["low"])
+
+    # R2: Medium clarity
+    r2 = min(q["medium"], c["medium"])
+
+    # R3: Low clarity
+    r3 = max(q["low"], a["high"])
+
+    # -------- DEFUZZIFICATION --------
+    numerator = r1 * 90 + r2 * 60 + r3 * 30
+    denominator = r1 + r2 + r3
+
+    if denominator == 0:
+        return 50
+
+    return numerator / denominator
+
+# -------------------------------------------------
+# Derived Soft Variable Computation
+# -------------------------------------------------
 
 def compute_learning_consistency(study_days, study_hours, sleep_hours):
     study_days_score = (study_days / 7) * 100
@@ -118,9 +168,9 @@ def generate_action_plan(concept, consistency, time_mgmt, cognitive_load, motiva
         actions.append({
             "title": "Improve Concept Clarity",
             "suggestions": [
-                "Use Retrieval Practice: Solve 5 questions daily without notes.",
-                "Apply Spaced Repetition (1-3-7 day cycle).",
-                "Use Feynman Technique to teach concepts aloud."
+                "Use Retrieval Practice daily.",
+                "Apply Spaced Repetition.",
+                "Teach concepts using Feynman Technique."
             ]
         })
 
@@ -128,9 +178,9 @@ def generate_action_plan(concept, consistency, time_mgmt, cognitive_load, motiva
         actions.append({
             "title": "Enhance Learning Consistency",
             "suggestions": [
-                "Fix a daily study time.",
-                "Follow 90-minute focused sessions.",
-                "Create weekly structured revision plan."
+                "Fix daily study time.",
+                "Follow 90-minute sessions.",
+                "Maintain weekly revision plan."
             ]
         })
 
@@ -138,9 +188,9 @@ def generate_action_plan(concept, consistency, time_mgmt, cognitive_load, motiva
         actions.append({
             "title": "Optimize Time Management",
             "suggestions": [
-                "Apply 2-hour Deep Work rule.",
-                "Use time blocking in calendar.",
-                "Limit screen time after 9PM."
+                "Use Deep Work blocks.",
+                "Apply time blocking.",
+                "Reduce unnecessary screen usage."
             ]
         })
 
@@ -148,19 +198,19 @@ def generate_action_plan(concept, consistency, time_mgmt, cognitive_load, motiva
         actions.append({
             "title": "Reduce Cognitive Load",
             "suggestions": [
-                "Sleep minimum 7–8 hours daily.",
-                "Practice 4-7-8 breathing technique.",
-                "Use 20-20-20 rule for eye relaxation."
+                "Sleep 7–8 hours.",
+                "Practice breathing techniques.",
+                "Take regular breaks."
             ]
         })
 
     if motivation < 60:
         actions.append({
-            "title": "Boost Academic Motivation",
+            "title": "Boost Motivation",
             "suggestions": [
-                "Set weekly performance targets.",
-                "Track daily study score.",
-                "Reward yourself after milestones."
+                "Set weekly goals.",
+                "Track daily progress.",
+                "Reward milestones."
             ]
         })
 
@@ -190,8 +240,8 @@ def assign_strategy(score):
 
 def simulate_improvement(input_data):
     original_score = predict_effectiveness(input_data)
-    improved = input_data.copy()
 
+    improved = input_data.copy()
     for key in improved:
         improved[key] = min(100, improved[key] + 10)
 
@@ -225,7 +275,9 @@ def analyze_student(form_input):
     confidence = form_input["confidence"]
     anxiety = form_input["anxiety"]
 
-    concept = compute_concept_clarity(quiz_avg, confidence, anxiety)
+    # 🔥 FUZZY LOGIC USED HERE
+    concept = fuzzy_concept_clarity(quiz_avg, confidence, anxiety)
+
     consistency = compute_learning_consistency(study_days, study_hours, sleep_hours)
     time_mgmt = compute_time_management(study_hours, screen_time, delay_days)
     cognitive_load = compute_cognitive_load(study_hours, screen_time, sleep_hours)
