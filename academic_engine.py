@@ -24,18 +24,64 @@ feature_columns = [
 def clamp(v):
     return max(0, min(100, v))
 
+# ---------------- INTERPRETATION ----------------
+
+def interpret_cluster(c):
+    if c == 2:
+        return "High-risk group: low consistency and high pressure"
+    elif c == 0:
+        return "Moderate group: needs better planning"
+    elif c == 3:
+        return "Improving group: needs conceptual strengthening"
+    else:
+        return "Strong academic group"
+
+def interpret_risk(score):
+    if score > 70:
+        return "High risk due to poor habits and overload"
+    elif score > 40:
+        return "Moderate risk — improvement required"
+    else:
+        return "Low risk — stable performance"
+
+def interpret_cognitive_load(load):
+    if load > 70:
+        return "High cognitive load → risk of burnout"
+    elif load > 40:
+        return "Moderate cognitive load → manageable but needs improvement"
+    else:
+        return "Low cognitive load → good balance"
+
+def generate_tips(sh, sl, st, p):
+
+    tips = []
+
+    if sl < 6:
+        tips.append("Improve sleep to 7–8 hrs for better memory")
+
+    if st > 6:
+        tips.append("Reduce screen time to improve concentration")
+
+    if p < 15:
+        tips.append("Practice daily using active recall (10+ questions/day)")
+
+    if sh < 3:
+        tips.append("Increase focused study time to at least 3 hrs/day")
+
+    if not tips:
+        tips.append("Maintain current routine and gradually optimize")
+
+    return tips
+
 # ---------------- FUZZY ----------------
 
 def fuzzy_concept_clarity(q, conf, anx):
 
-    conf = str(conf).lower().strip()
-    anx = str(anx).lower().strip()
-
     conf_map = {"low": 30, "medium": 60, "high": 90}
     anx_map = {"low": 20, "medium": 50, "high": 80}
 
-    conf_score = conf_map.get(conf, 60)
-    anx_score = anx_map.get(anx, 50)
+    conf_score = conf_map.get(str(conf).lower(), 60)
+    anx_score = anx_map.get(str(anx).lower(), 50)
 
     score = clamp(0.6*q + 0.25*conf_score - 0.15*anx_score)
 
@@ -46,13 +92,13 @@ def fuzzy_concept_clarity(q, conf, anx):
     elif q < 70:
         explanation.append("Moderate quiz performance → partial understanding")
     else:
-        explanation.append("Strong quiz performance")
+        explanation.append("Your quiz performance is strong")
 
     if conf == "low":
-        explanation.append("Low confidence is reducing performance")
+        explanation.append("Low confidence is reducing your performance")
 
     if anx == "high":
-        explanation.append("High anxiety affects performance under pressure")
+        explanation.append("High anxiety is affecting your performance under pressure")
 
     return score, explanation
 
@@ -111,11 +157,7 @@ def generate_optimization_plan(data):
         current[best_feature] = min(100, current[best_feature] + 5)
 
     return [
-        {
-            "feature": k,
-            "from": round(data[k],1),
-            "to": round(current[k],1)
-        }
+        {"feature": k, "from": round(data[k],1), "to": round(current[k],1)}
         for k in data if current[k] > data[k]
     ]
 
@@ -157,15 +199,10 @@ def generate_target_plan(data, target=80):
 # ---------------- PRIORITY ----------------
 
 def get_priority_areas(data):
-
     sorted_features = sorted(data.items(), key=lambda x: x[1])[:3]
+    return [{"feature": k, "value": round(v,1)} for k,v in sorted_features]
 
-    return [
-        {"feature": name, "value": round(val,1)}
-        for name, val in sorted_features
-    ]
-
-# ---------------- EXTRA FEATURES ----------------
+# ---------------- EXTRA ----------------
 
 def generate_study_plan(sh, p):
 
@@ -187,10 +224,10 @@ def generate_study_plan(sh, p):
 def detect_efficiency(sh, concept, p):
 
     if sh > 5 and concept < 50:
-        return "You study a lot but output is low → use active recall"
+        return "High effort but low output → use active recall"
 
     elif p > 30 and concept < 60:
-        return "Too much solving without understanding → revise concepts"
+        return "Too much solving without understanding"
 
     elif sh < 2:
         return "Low study time is limiting performance"
@@ -199,27 +236,24 @@ def detect_efficiency(sh, concept, p):
         return "Your study pattern is balanced and effective"
 
 def get_student_level(score):
-
     if score < 40:
         return "Beginner"
     elif score < 70:
         return "Intermediate"
-    else:
-        return "Advanced"
+    return "Advanced"
 
 def generate_hidden_insight(sh, sl, st, p):
 
     if sl < 6:
-        return "Sleep deficiency is your biggest hidden issue"
+        return "Sleep is your biggest hidden bottleneck"
 
     elif st > 6:
-        return "High screen time is reducing your focus"
+        return "Screen time is reducing your focus"
 
     elif p < 10:
         return "Low practice is limiting your growth"
 
-    else:
-        return "No major hidden issue detected — keep optimizing"
+    return "No major hidden issue detected"
 
 # ---------------- MAIN ----------------
 
