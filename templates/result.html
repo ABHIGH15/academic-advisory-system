@@ -39,16 +39,23 @@
     </div>
 
     <!-- ================= PRIORITY ================= -->
+    {% if result.Priority_Areas %}
     <div class="card soft-card">
         <h2>⭐ Top Priority Areas</h2>
         <ul>
-            {% for name, value in result.Priority_Areas %}
-                <li><strong>{{ name.replace('_',' ') }}</strong> → {{ value }}</li>
+            {% for item in result.Priority_Areas %}
+                <li>
+                    <strong>{{ item.feature.replace('_',' ') }}</strong>
+                    → {{ item.value }}
+                </li>
             {% endfor %}
         </ul>
+        <p>👉 Focus on these FIRST for maximum improvement</p>
     </div>
+    {% endif %}
 
     <!-- ================= TARGET ================= -->
+    {% if result.Target_Plan %}
     <div class="card soft-card">
         <h2>🎯 Target Plan</h2>
         <ul>
@@ -60,8 +67,10 @@
             {% endfor %}
         </ul>
     </div>
+    {% endif %}
 
     <!-- ================= STUDY PLAN ================= -->
+    {% if result.Study_Plan %}
     <div class="card soft-card">
         <h2>📅 Weekly Study Plan</h2>
         <ul>
@@ -70,6 +79,7 @@
             {% endfor %}
         </ul>
     </div>
+    {% endif %}
 
     <!-- ================= EFFICIENCY ================= -->
     <div class="card soft-card">
@@ -95,6 +105,7 @@
     </div>
 
     <!-- ================= CONCEPT ================= -->
+    {% if result.Concept_Explanation %}
     <div class="card soft-card">
         <h2>🧠 Concept Analysis</h2>
         <ul>
@@ -103,6 +114,7 @@
             {% endfor %}
         </ul>
     </div>
+    {% endif %}
 
     <!-- ================= CLUSTER ================= -->
     <div class="card soft-card">
@@ -118,9 +130,11 @@
                 {{ result.Risk_Score }}%
             </div>
         </div>
+        <p>{{ result.Risk_Reason }}</p>
     </div>
 
     <!-- ================= IMPROVEMENT ================= -->
+    {% if result.Optimization_Insights %}
     <div class="card soft-card">
         <h2>🚀 Improvement Plan</h2>
         <ul>
@@ -132,8 +146,10 @@
             {% endfor %}
         </ul>
     </div>
+    {% endif %}
 
     <!-- ================= TIPS ================= -->
+    {% if result.Smart_Tips %}
     <div class="card soft-card">
         <h2>💡 Smart Tips</h2>
         <ul>
@@ -142,6 +158,7 @@
             {% endfor %}
         </ul>
     </div>
+    {% endif %}
 
     <!-- ================= RADAR ================= -->
     <div class="card soft-card">
