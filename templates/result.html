@@ -12,33 +12,54 @@
 </head>
 
 <body class="soft-report-bg">
-<div class="container soft-glass">
 
-    <h1 class="soft-title">🧠 Your Academic Intelligence Report</h1>
+<!-- 🔥 Background Effects -->
+<div class="bg-ambient"></div>
+<div class="bg-ambient2"></div>
+
+<div class="container">
+
+    <!-- ================= HERO ================= -->
+    <div class="soft-card" style="text-align:center; margin-bottom:25px;">
+        <h1 class="soft-title">🧠 Your Academic Report</h1>
+
+        <p style="opacity:0.85;">
+            Personalized insights, improvement strategy & performance optimization
+        </p>
+    </div>
 
     <!-- ================= PERFORMANCE ================= -->
-    <div class="card soft-card">
-        <h2>📊 Your Performance Score</h2>
-        <div class="progress-bar soft-progress">
-            <div class="progress soft-fill-progress" style="width: {{ result.Effectiveness }}%;">
+    <div class="soft-card">
+
+        <h2>📊 Performance Overview</h2>
+
+        <div class="progress-bar">
+            <div class="progress" style="width: {{ result.Effectiveness }}%;">
                 {{ result.Effectiveness }}%
             </div>
         </div>
-        <p><strong>Level:</strong> {{ result.Student_Level }}</p>
-        <p>{{ result.Strategy }}</p>
+
+        <div style="display:flex; justify-content:space-between; margin-top:10px;">
+            <p><strong>Level:</strong> {{ result.Student_Level }}</p>
+            <p style="opacity:0.8;">{{ result.Strategy }}</p>
+        </div>
+
     </div>
 
     <!-- ================= PRIORITY ================= -->
-    <div class="card soft-card">
-        <h2>⭐ What You Should Fix First</h2>
+    <div class="soft-card">
+
+        <h2>⭐ Focus Areas (Highest Impact)</h2>
 
         {% for item in result.Priority_Areas %}
             <div class="plan-box">
                 <h3>{{ item.feature }}</h3>
-                <p><strong>Current Score:</strong> {{ item.value }}</p>
+
+                <p><strong>Current Level:</strong> {{ item.value }}</p>
+
                 <p>{{ item.meaning }}</p>
 
-                <p><strong>How to improve:</strong></p>
+                <p><strong>Improve using:</strong></p>
                 <ul>
                     {% for action in item.actions %}
                         <li>{{ action }}</li>
@@ -46,24 +67,25 @@
                 </ul>
             </div>
         {% endfor %}
+
     </div>
 
     <!-- ================= TARGET ================= -->
-    <div class="card soft-card">
-        <h2>🎯 Your Personalized Improvement Plan</h2>
+    <div class="soft-card">
+
+        <h2>🎯 Personalized Improvement Plan</h2>
 
         {% for step in result.Target_Plan %}
             <div class="plan-box">
                 <h3>{{ step.feature }}</h3>
 
                 <p>
-                    <strong>Current:</strong> {{ step.current }}
+                    <strong>Now:</strong> {{ step.current }}
                     → <strong>Target:</strong> {{ step.target }}
                 </p>
 
                 <p>{{ step.meaning }}</p>
 
-                <p><strong>Action Steps:</strong></p>
                 <ul>
                     {% for action in step.actions %}
                         <li>{{ action }}</li>
@@ -71,92 +93,115 @@
                 </ul>
             </div>
         {% endfor %}
+
     </div>
 
     <!-- ================= INSIGHTS ================= -->
     {% if result.Advanced_Insights %}
-    <div class="card soft-card">
-        <h2>🧠 What’s Really Holding You Back</h2>
+    <div class="soft-card">
+
+        <h2>🧠 Hidden Behavioral Insights</h2>
+
         <ul>
             {% for insight in result.Advanced_Insights %}
                 <li>{{ insight }}</li>
             {% endfor %}
         </ul>
+
     </div>
     {% endif %}
 
     <!-- ================= TECHNIQUES ================= -->
     {% if result.Techniques %}
-    <div class="card soft-card">
-        <h2>⚡ Smart Study Techniques You Should Use</h2>
+    <div class="soft-card">
+
+        <h2>⚡ Smart Techniques for Better Results</h2>
+
         <ul>
             {% for tech in result.Techniques %}
                 <li>{{ tech }}</li>
             {% endfor %}
         </ul>
+
     </div>
     {% endif %}
 
     <!-- ================= WELLNESS ================= -->
     {% if result.Wellness_Tips %}
-    <div class="card soft-card">
-        <h2>🧘 Improve Focus, Sleep & Mental State</h2>
+    <div class="soft-card">
+
+        <h2>🧘 Optimize Your Focus & Energy</h2>
+
         <ul>
             {% for tip in result.Wellness_Tips %}
                 <li>{{ tip }}</li>
             {% endfor %}
         </ul>
+
     </div>
     {% endif %}
 
     <!-- ================= COGNITIVE LOAD ================= -->
-    <div class="card soft-card">
-        <h2>🧠 Your Brain Load</h2>
-        <div class="progress-bar soft-progress">
+    <div class="soft-card">
+
+        <h2>🧠 Cognitive Load</h2>
+
+        <div class="progress-bar">
             <div class="progress" style="width: {{ result.Cognitive_Load }}%; background:#8b5cf6;">
                 {{ result.Cognitive_Load }}%
             </div>
         </div>
+
         <p>{{ result.Cognitive_Insight }}</p>
+
     </div>
 
     <!-- ================= CONCEPT ================= -->
-    <div class="card soft-card">
-        <h2>🧠 Concept Understanding Breakdown</h2>
+    <div class="soft-card">
+
+        <h2>🧠 Concept Understanding</h2>
+
         <ul>
             {% for line in result.Concept_Explanation %}
                 <li>{{ line }}</li>
             {% endfor %}
         </ul>
+
     </div>
 
     <!-- ================= RADAR ================= -->
-    <div class="card soft-card">
-        <h2>📈 Your Academic Profile</h2>
+    <div class="soft-card">
+
+        <h2>📈 Academic Profile Visualization</h2>
+
         <canvas id="radarChart"></canvas>
+
     </div>
 
-    <!-- ================= ACTION ================= -->
-    <div class="card soft-card center">
+    <!-- ================= CTA ================= -->
+    <div class="soft-card center">
+
         <form action="/download_report" method="post">
             <input type="hidden" name="effectiveness" value="{{ result.Effectiveness }}">
             <input type="hidden" name="strategy" value="{{ result.Strategy }}">
-            <input type="hidden" name="summary" value="Personalized academic analysis report">
+            <input type="hidden" name="summary" value="Academic Intelligence Report">
 
             <button type="submit" class="btn-primary">
                 📄 Download Report
             </button>
         </form>
-    </div>
 
-    <div class="center">
-        <a href="/" class="btn-secondary">
-            Analyze Again
-        </a>
+        <div style="margin-top:15px;">
+            <a href="/" class="btn-secondary">
+                🔁 Analyze Again
+            </a>
+        </div>
+
     </div>
 
 </div>
 
+<!-- ================= CHART ================= -->
 <script>
 const ctx = document.getElementById('radarChart');
 
@@ -165,7 +210,7 @@ new Chart(ctx, {
     data: {
         labels: ["Attendance","Concept","Practice","Internal","Assignment","Time Mgmt","Consistency"],
         datasets: [{
-            label: 'Your Profile',
+            label: 'Your Academic Profile',
             data: [
                 {{ result.Feature_Data.Attendance_Rate }},
                 {{ result.Feature_Data.Concept_Clarity }},
