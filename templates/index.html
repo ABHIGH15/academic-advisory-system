@@ -2,102 +2,132 @@
 <html>
 <head>
     <title>Academic Optimization System</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body class="soft-compute-bg">
-<div class="container soft-glass">
 
-    <h1 class="soft-title">🎓 Academic Optimization Engine</h1>
-    <p class="subtitle soft-desc">
-        Intelligent Hybrid Soft Computing Analysis of Academic Performance & Cognitive Wellness
-    </p>
+<!-- 🔥 Animated Background -->
+<div class="bg-ambient"></div>
+<div class="bg-ambient2"></div>
 
+<div class="container">
+
+    <!-- ================= HERO ================= -->
+    <div class="soft-card" style="text-align:center; margin-bottom:30px;">
+        <h1 class="soft-title">🧠 Academic Optimization Engine</h1>
+
+        <p class="subtitle soft-desc">
+            Analyze your performance, discover hidden problems, and get a personalized improvement plan.
+        </p>
+
+        <p style="opacity:0.8; font-size:0.95rem;">
+            Takes less than 1 minute • Powered by Soft Computing + AI Logic
+        </p>
+    </div>
+
+    <!-- ================= FORM ================= -->
     <form action="/analyze" method="post" class="form-card soft-card">
 
-        <!-- ================= ACADEMIC METRICS ================= -->
+        <!-- ================= SECTION 1 ================= -->
+        <div class="section-block">
+            <h2 class="section-title">📊 Academic Performance</h2>
+            <p class="section-desc">Your current academic standing</p>
 
-        <h2 class="section-title">📊 Academic Performance</h2>
+            <div class="input-group">
+                <label>Attendance (%)</label>
+                <input type="number" name="attendance" min="0" max="100" required>
+            </div>
 
-        <div class="input-group">
-            <label>Attendance (%)</label>
-            <input type="number" name="attendance" min="0" max="100" required>
+            <div class="input-group">
+                <label>Quiz Average (%)</label>
+                <input type="number" name="quiz_avg" min="0" max="100" required>
+            </div>
+
+            <div class="input-group">
+                <label>Internal Assessment (%)</label>
+                <input type="number" name="internal" min="0" max="100" required>
+            </div>
         </div>
 
-        <div class="input-group">
-            <label>Quiz Average (%)</label>
-            <input type="number" name="quiz_avg" min="0" max="100" required>
+        <!-- ================= SECTION 2 ================= -->
+        <div class="section-block">
+            <h2 class="section-title">📚 Study Behavior</h2>
+            <p class="section-desc">Your study habits and effort level</p>
+
+            <div class="input-group">
+                <label>Study Hours Per Day</label>
+                <input type="number" step="0.1" name="study_hours" min="0" max="16" required>
+            </div>
+
+            <div class="input-group">
+                <label>Study Days Per Week (0–7)</label>
+                <input type="number" name="study_days" min="0" max="7" required>
+            </div>
+
+            <div class="input-group">
+                <label>Practice Problems Per Week</label>
+                <input type="number" name="practice_per_week" min="0" max="200" required>
+            </div>
+
+            <div class="input-group">
+                <label>Assignment Delay (Days)</label>
+                <input type="number" step="0.1" name="assignment_delay" min="0" max="30" required>
+            </div>
         </div>
 
-        <div class="input-group">
-            <label>Internal Assessment (%)</label>
-            <input type="number" name="internal" min="0" max="100" required>
+        <!-- ================= SECTION 3 ================= -->
+        <div class="section-block">
+            <h2 class="section-title">🧠 Cognitive & Wellness</h2>
+            <p class="section-desc">Your mental state and lifestyle impact</p>
+
+            <div class="input-group">
+                <label>Sleep Hours Per Night</label>
+                <input type="number" step="0.1" name="sleep_hours" min="0" max="12" required>
+            </div>
+
+            <div class="input-group">
+                <label>Screen Time Per Day (Hours)</label>
+                <input type="number" step="0.1" name="screen_time" min="0" max="16" required>
+            </div>
+
+            <div class="input-group">
+                <label>Self-Confidence Level</label>
+                <select name="confidence" required>
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Exam Anxiety Level</label>
+                <select name="anxiety" required>
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
+            </div>
         </div>
 
-        <!-- ================= STUDY BEHAVIOR ================= -->
+        <!-- ================= CTA ================= -->
+        <div style="margin-top:25px;">
+            <button type="submit" class="btn-primary">
+                🚀 Analyze My Academic Profile
+            </button>
 
-        <h2 class="section-title">📚 Study Behavior</h2>
-
-        <div class="input-group">
-            <label>Study Hours Per Day</label>
-            <input type="number" step="0.1" name="study_hours" min="0" max="16" required>
+            <p style="text-align:center; margin-top:10px; opacity:0.7; font-size:0.9rem;">
+                Get personalized insights + improvement strategy instantly
+            </p>
         </div>
-
-        <div class="input-group">
-            <label>Study Days Per Week (0-7)</label>
-            <input type="number" name="study_days" min="0" max="7" required>
-        </div>
-
-        <div class="input-group">
-            <label>Practice Problems Solved Per Week</label>
-            <input type="number" name="practice_per_week" min="0" max="200" required>
-        </div>
-
-        <div class="input-group">
-            <label>Average Assignment Delay (Days)</label>
-            <input type="number" step="0.1" name="assignment_delay" min="0" max="30" required>
-        </div>
-
-        <!-- ================= WELLNESS & COGNITIVE ================= -->
-
-        <h2 class="section-title">🧠 Cognitive & Wellness Factors</h2>
-
-        <div class="input-group">
-            <label>Sleep Hours Per Night</label>
-            <input type="number" step="0.1" name="sleep_hours" min="0" max="12" required>
-        </div>
-
-        <div class="input-group">
-            <label>Screen Time Per Day (Hours)</label>
-            <input type="number" step="0.1" name="screen_time" min="0" max="16" required>
-        </div>
-
-        <div class="input-group">
-            <label>Self-Confidence Level</label>
-            <select name="confidence" required>
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
-            </select>
-        </div>
-
-        <div class="input-group">
-            <label>Exam Anxiety Level</label>
-            <select name="anxiety" required>
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
-            </select>
-        </div>
-
-        <button type="submit" class="btn-primary soft-compute-btn">
-            Analyze Academic Profile
-        </button>
 
     </form>
 
 </div>
+
 </body>
 </html>
