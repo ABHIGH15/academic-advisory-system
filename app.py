@@ -61,43 +61,98 @@ def analyze():
 @app.route("/download_report", methods=["POST"])
 def download_report():
 
-    try:
-        # Get values safely
-        effectiveness = request.form.get("effectiveness", "N/A")
-        risk = request.form.get("risk", "N/A")
-        strategy = request.form.get("strategy", "N/A")
-        summary = request.form.get("summary", "No summary available")
+    import json
+    import io
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, ListFlowable
+    from reportlab.lib.styles import getSampleStyleSheet
+    from reportlab.lib.pagesizes import letter
 
-        buffer = io.BytesIO()
-        doc = SimpleDocTemplate(buffer, pagesize=letter)
-        styles = getSampleStyleSheet()
-        elements = []
+    # 👇 FULL result passed as JSON
+    result = json.loads(request.form.get("full_result"))
 
-        # Title
-        elements.append(Paragraph("Academic Intelligence Report", styles["Title"]))
-        elements.append(Spacer(1, 20))
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=letter)
+    styles = getSampleStyleSheet()
 
-        # Core Metrics
-        elements.append(Paragraph(f"Effectiveness: {effectiveness}%", styles["Normal"]))
-        elements.append(Paragraph(f"Risk Score: {risk}%", styles["Normal"]))
-        elements.append(Paragraph(f"Strategy: {strategy}", styles["Normal"]))
-        elements.append(Spacer(1, 20))
+    elements = []
 
-        # Summary
-        elements.append(Paragraph("Summary:", styles["Heading2"]))
-        elements.append(Spacer(1, 10))
-        elements.append(Paragraph(summary, styles["Normal"]))
+    # ===== TITLE =====
+    elements.append(Paragraph("Academic Intelligence Report", styles["Title"]))
+    elements.append(Spacer(1, 15))
 
-        doc.build(elements)
-        buffer.seek(0)
+    # ===== PERFORMANCE =====
+    elements.append(Paragraph(f"Performance Score: {result['Effectiveness']}%", styles["Heading2"]))
+    elements.append(Paragraph(f"Level: {result['Student_Level']}", styles["Normal"]))
+    elements.append(Paragraph(f"Strategy: {result['Strategy']}", styles["Normal"]))
+    elements.append(Spacer(1, 15))
 
-        return send_file(
-            buffer,
-            as_attachment=True,
-            download_name="Academic_Report.pdf",
-            mimetype="application/pdf"
+    # ===== PRIORITY =====
+    elements.append(Paragraph("Priority Areas:", styles["Heading2"]))
+    for item in result["Priority_Areas"]:
+        elements.append(Paragraph(f"{item['feature']} ({item['value']})", styles["Normal"]))
+        elements.append(Paragraph(item["meaning"], styles["Normal"]))
+
+        bullet = ListFlowable(
+            [Paragraph(a, styles["Normal"]) for a in item["actions"]]
         )
+        elements.append(bullet)
+        elements.append(Spacer(1, 10))
 
+    # ===== TARGET PLAN =====
+    elements.append(Paragraph("Improvement Plan:", styles["Heading2"]))
+    for step in result["Target_Plan"]:
+        elements.append(Paragraph(f"{step['feature']}: {step['current']} → {step['target']}", styles["Normal"]))
+        elements.append(Paragraph(step["meaning"], styles["Normal"]))
+
+        bullet = ListFlowable(
+            [Paragraph(a, styles["Normal"]) for a in step["actions"]]
+        )
+        elements.append(bullet)
+        elements.append(Spacer(1, 10))
+
+    # ===== INSIGHTS =====
+    if result.get("Advanced_Insights"):
+        elements.append(Paragraph("Behavioral Insights:", styles["Heading2"]))
+        bullet = ListFlowable(
+            [Paragraph(i, styles["Normal"]) for i in result["Advanced_Insights"]]
+        )
+        elements.append(bullet)
+        elements.append(Spacer(1, 10))
+
+    # ===== TECHNIQUES =====
+    if result.get("Techniques"):
+        elements.append(Paragraph("Recommended Techniques:", styles["Heading2"]))
+        bullet = ListFlowable(
+            [Paragraph(t, styles["Normal"]) for t in result["Techniques"]]
+        )
+        elements.append(bullet)
+        elements.append(Spacer(1, 10))
+
+    # ===== WELLNESS =====
+    if result.get("Wellness_Tips"):
+        elements.append(Paragraph("Wellness Tips:", styles["Heading2"]))
+        bullet = ListFlowable(
+            [Paragraph(t, styles["Normal"]) for t in result["Wellness_Tips"]]
+        )
+        elements.append(bullet)
+        elements.append(Spacer(1, 10))
+
+    # ===== CONCEPT =====
+    elements.append(Paragraph("Concept Analysis:", styles["Heading2"]))
+    bullet = ListFlowable(
+        [Paragraph(c, styles["Normal"]) for c in result["Concept_Explanation"]]
+    )
+    elements.append(bullet)
+
+    doc.build(elements)
+    buffer.seek(0)
+
+    return send_file(
+        buffer,
+        as_attachment=True,
+        download_name="Academic_Report.pdf",
+        mimetype="application/pdf"
+    )
     except Exception as e:
         return f"""
         <h1>❌ PDF Generation Error</h1>
