@@ -153,12 +153,7 @@ def download_report():
         download_name="Academic_Report.pdf",
         mimetype="application/pdf"
     )
-    except Exception as e:
-        return f"""
-        <h1>❌ PDF Generation Error</h1>
-        <pre>{str(e)}</pre>
-        """
-
+    
 # --------------------------------------------------
 # Run App
 # --------------------------------------------------
