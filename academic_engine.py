@@ -28,50 +28,29 @@ def clamp(v):
 
 def interpret_cluster(c):
     if c == 2:
-        return "High-risk group: low consistency and high pressure"
+        return "High-risk academic profile: inconsistent learning and high cognitive stress"
     elif c == 0:
-        return "Moderate group: needs better planning"
+        return "Moderate profile: improvement possible with structured planning"
     elif c == 3:
-        return "Improving group: needs conceptual strengthening"
+        return "Developing profile: needs conceptual strengthening"
     else:
-        return "Strong academic group"
+        return "Strong academic profile with stable performance"
 
 def interpret_risk(score):
     if score > 70:
-        return "High risk due to poor habits and overload"
+        return "High academic risk due to overload and weak learning habits"
     elif score > 40:
-        return "Moderate risk — improvement required"
+        return "Moderate risk — improvement needed in key areas"
     else:
-        return "Low risk — stable performance"
+        return "Low academic risk — performance is stable"
 
 def interpret_cognitive_load(load):
     if load > 70:
-        return "High cognitive load → risk of burnout"
+        return "High cognitive load → burnout risk"
     elif load > 40:
-        return "Moderate cognitive load → manageable but needs improvement"
+        return "Moderate load → manageable but needs optimization"
     else:
-        return "Low cognitive load → good balance"
-
-def generate_tips(sh, sl, st, p):
-
-    tips = []
-
-    if sl < 6:
-        tips.append("Improve sleep to 7–8 hrs for better memory")
-
-    if st > 6:
-        tips.append("Reduce screen time to improve concentration")
-
-    if p < 15:
-        tips.append("Practice daily using active recall (10+ questions/day)")
-
-    if sh < 3:
-        tips.append("Increase focused study time to at least 3 hrs/day")
-
-    if not tips:
-        tips.append("Maintain current routine and gradually optimize")
-
-    return tips
+        return "Low cognitive load → healthy learning state"
 
 # ---------------- FUZZY ----------------
 
@@ -88,17 +67,17 @@ def fuzzy_concept_clarity(q, conf, anx):
     explanation = []
 
     if q < 50:
-        explanation.append("Low quiz performance → weak conceptual base")
+        explanation.append("Weak conceptual base due to low quiz performance")
     elif q < 70:
-        explanation.append("Moderate quiz performance → partial understanding")
+        explanation.append("Partial understanding — needs reinforcement")
     else:
-        explanation.append("Your quiz performance is strong")
+        explanation.append("Strong conceptual understanding")
 
     if conf == "low":
-        explanation.append("Low confidence is reducing your performance")
+        explanation.append("Low confidence reducing performance efficiency")
 
     if anx == "high":
-        explanation.append("High anxiety is affecting your performance under pressure")
+        explanation.append("High anxiety negatively impacting performance")
 
     return score, explanation
 
@@ -128,6 +107,78 @@ def assign_strategy(score):
         return "Consistency Growth Strategy"
     else:
         return "Advanced Optimization Strategy"
+
+# ---------------- ADVANCED RULE ENGINE ----------------
+
+def generate_advanced_insights(sh, concept, st, sl, p):
+
+    insights = []
+
+    if sh > 5 and concept < 50:
+        insights.append("High study time but low learning → inefficient study method")
+
+    if st > 6 and sl < 6:
+        insights.append("High screen time + low sleep → cognitive overload")
+
+    if p > 30 and concept < 60:
+        insights.append("Excessive practice without understanding → revise concepts")
+
+    if sh < 2 and p < 10:
+        insights.append("Low engagement → inconsistent learning behavior")
+
+    return insights
+
+# ---------------- TECHNIQUE ENGINE ----------------
+
+def generate_techniques(sh, concept, st, sl, p):
+
+    techniques = []
+
+    if concept < 60:
+        techniques.append("Active Recall → test yourself instead of rereading")
+        techniques.append("Spaced Repetition → revise at intervals")
+
+    if p < 15:
+        techniques.append("Pomodoro Technique (25/5 focus cycles)")
+
+    if sh < 3:
+        techniques.append("Eat That Frog → start with hardest task")
+        techniques.append("1-2-5 Rule → structured daily planning")
+
+    if st > 5:
+        techniques.append("Digital Detox during study sessions")
+        techniques.append("Seinfeld Strategy → maintain consistency streaks")
+
+    techniques.append("Pareto Principle → focus on high-impact topics")
+
+    return techniques
+
+# ---------------- WELLNESS ----------------
+
+def generate_wellness_tips(sl, st, anx):
+
+    tips = []
+
+    if sl < 6:
+        tips.append("4-7-8 breathing for sleep improvement")
+        tips.append("Military sleep method for faster sleep")
+        tips.append("10-3-2-1-0 sleep rule")
+
+    if anx == "high":
+        tips.append("Box breathing for anxiety control")
+        tips.append("5-4-3-2-1 grounding technique")
+        tips.append("Progressive Muscle Relaxation (PMR)")
+
+    if st > 6:
+        tips.append("20-minute rule to reduce screen addiction")
+
+    return tips
+
+# ---------------- PRIORITY ----------------
+
+def get_priority_areas(data):
+    sorted_features = sorted(data.items(), key=lambda x: x[1])[:3]
+    return [{"feature": k, "value": round(v,1)} for k,v in sorted_features]
 
 # ---------------- OPTIMIZATION ----------------
 
@@ -196,65 +247,6 @@ def generate_target_plan(data, target=80):
         for k in data if current[k] > data[k]
     ]
 
-# ---------------- PRIORITY ----------------
-
-def get_priority_areas(data):
-    sorted_features = sorted(data.items(), key=lambda x: x[1])[:3]
-    return [{"feature": k, "value": round(v,1)} for k,v in sorted_features]
-
-# ---------------- EXTRA ----------------
-
-def generate_study_plan(sh, p):
-
-    plan = []
-
-    if sh < 3:
-        plan.append("Study 2–3 hrs daily (concept + practice)")
-    else:
-        plan.append("Maintain structured study routine")
-
-    if p < 15:
-        plan.append("Solve at least 10–15 problems daily")
-
-    plan.append("Take 1 mock test weekly")
-    plan.append("Revise weak topics on weekends")
-
-    return plan
-
-def detect_efficiency(sh, concept, p):
-
-    if sh > 5 and concept < 50:
-        return "High effort but low output → use active recall"
-
-    elif p > 30 and concept < 60:
-        return "Too much solving without understanding"
-
-    elif sh < 2:
-        return "Low study time is limiting performance"
-
-    else:
-        return "Your study pattern is balanced and effective"
-
-def get_student_level(score):
-    if score < 40:
-        return "Beginner"
-    elif score < 70:
-        return "Intermediate"
-    return "Advanced"
-
-def generate_hidden_insight(sh, sl, st, p):
-
-    if sl < 6:
-        return "Sleep is your biggest hidden bottleneck"
-
-    elif st > 6:
-        return "Screen time is reducing your focus"
-
-    elif p < 10:
-        return "Low practice is limiting your growth"
-
-    return "No major hidden issue detected"
-
 # ---------------- MAIN ----------------
 
 def analyze_student(f):
@@ -300,7 +292,7 @@ def analyze_student(f):
     return {
         "Effectiveness": round(eff,2),
         "Strategy": assign_strategy(eff),
-        "Student_Level": get_student_level(eff),
+        "Student_Level": "Beginner" if eff < 40 else "Intermediate" if eff < 70 else "Advanced",
 
         "Cluster_Insight": interpret_cluster(cluster),
         "Risk_Score": risk,
@@ -315,11 +307,9 @@ def analyze_student(f):
         "Target_Plan": generate_target_plan(ann_input),
         "Optimization_Insights": generate_optimization_plan(ann_input),
 
-        "Study_Plan": generate_study_plan(sh, p),
-        "Efficiency_Insight": detect_efficiency(sh, concept, p),
-        "Hidden_Insight": generate_hidden_insight(sh, sl, st, p),
-
-        "Smart_Tips": generate_tips(sh, sl, st, p),
+        "Advanced_Insights": generate_advanced_insights(sh, concept, st, sl, p),
+        "Techniques": generate_techniques(sh, concept, st, sl, p),
+        "Wellness_Tips": generate_wellness_tips(sl, st, anx),
 
         "Feature_Data": ann_input
     }
