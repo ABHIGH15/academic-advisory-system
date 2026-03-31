@@ -182,15 +182,12 @@
     <div class="soft-card center">
 
         <form action="/download_report" method="post">
-            <input type="hidden" name="effectiveness" value="{{ result.Effectiveness }}">
-            <input type="hidden" name="strategy" value="{{ result.Strategy }}">
-            <input type="hidden" name="summary" value="Academic Intelligence Report">
+    <input type="hidden" name="full_result" value='{{ result | tojson }}'>
 
-            <button type="submit" class="btn-primary">
-                📄 Download Report
-            </button>
-        </form>
-
+    <button type="submit" class="btn-primary">
+        📄 Download Full Report
+    </button>
+</form>
         <div style="margin-top:15px;">
             <a href="/" class="btn-secondary">
                 🔁 Analyze Again
