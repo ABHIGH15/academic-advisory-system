@@ -1,19 +1,14 @@
 /* ========================================
-   PREMIUM ACADEMIC INTELLIGENCE UI
-   FINAL • PRODUCTION • UNIQUE • VIBRANT
+   PREMIUM ACADEMIC UI (ULTRA LIGHT GLASS)
 ======================================== */
-
-/* ===== ROOT COLORS ===== */
 
 :root {
     --primary: #1e3a8a;
     --accent: #10b981;
-    --card: rgba(255,255,255,0.92);
-    --border: rgba(0,0,0,0.08);
     --text: #1e293b;
 }
 
-/* ===== BODY (CUSTOM IMAGE + OVERLAY) ===== */
+/* ===== BODY ===== */
 
 body {
     margin: 0;
@@ -21,7 +16,7 @@ body {
     color: var(--text);
 
     background:
-        linear-gradient(rgba(248,250,252,0.60), rgba(248,250,252,0.65)),
+        linear-gradient(rgba(248,250,252,0.45), rgba(248,250,252,0.50)),
         url("/static/academic_bg.jpeg");
 
     background-size: cover;
@@ -31,7 +26,7 @@ body {
     overflow-x: hidden;
 }
 
-/* ===== GRID OVERLAY ===== */
+/* ===== GRID ===== */
 
 body::before {
     content: "";
@@ -40,14 +35,14 @@ body::before {
     height: 100%;
 
     background-image:
-        linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+        linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
 
     background-size: 50px 50px;
     z-index: -1;
 }
 
-/* ===== FLOATING LIGHT EFFECT ===== */
+/* ===== LIGHT EFFECT ===== */
 
 body::after {
     content: "";
@@ -56,20 +51,18 @@ body::after {
     height: 100%;
 
     background:
-        radial-gradient(circle at 20% 30%, rgba(30,58,138,0.18), transparent 40%),
-        radial-gradient(circle at 80% 70%, rgba(16,185,129,0.15), transparent 40%);
+        radial-gradient(circle at 20% 30%, rgba(30,58,138,0.12), transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(16,185,129,0.10), transparent 40%);
 
     z-index: -2;
 
     animation: floatBg 14s infinite alternate ease-in-out;
 }
 
-/* ===== BACKGROUND MOTION ===== */
-
 @keyframes floatBg {
     0% { transform: translate(0,0); }
-    50% { transform: translate(50px,-40px); }
-    100% { transform: translate(-30px,30px); }
+    50% { transform: translate(40px,-30px); }
+    100% { transform: translate(-20px,20px); }
 }
 
 /* ===== CONTAINER ===== */
@@ -88,50 +81,31 @@ body::after {
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 15px;
-
     color: var(--primary);
-
-    animation: fadeIn 1s ease;
 }
 
-/* ===== CARDS ===== */
+/* ===== ULTRA LIGHT CARDS ===== */
 
 .soft-card {
-    background: var(--card);
+    background: rgba(255, 255, 255, 0.55);  /* 🔥 VERY LIGHT */
     border-radius: 16px;
-    border: 1px solid var(--border);
+
+    border: 1px solid rgba(255,255,255,0.25);
+
     padding: 26px;
     margin-bottom: 22px;
 
-    backdrop-filter: blur(6px);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 
-    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.05);
 
     transition: all 0.35s ease;
-    animation: fadeUp 0.9s ease;
 }
 
 .soft-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 25px 50px rgba(0,0,0,0.15);
-}
-
-/* ===== ANIMATIONS ===== */
-
-@keyframes fadeUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    transform: translateY(-6px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.10);
 }
 
 /* ===== HEADINGS ===== */
@@ -155,16 +129,18 @@ input, select {
     width: 100%;
     padding: 11px;
     border-radius: 10px;
-    border: 1px solid var(--border);
+    border: 1px solid rgba(0,0,0,0.1);
+
+    background: rgba(255,255,255,0.75);  /* slightly transparent */
+
     margin-top: 6px;
-    background: white;
     transition: all 0.25s ease;
 }
 
 input:focus, select:focus {
     border-color: var(--primary);
     outline: none;
-    box-shadow: 0 0 0 3px rgba(30,58,138,0.15);
+    box-shadow: 0 0 0 2px rgba(30,58,138,0.15);
 }
 
 /* ===== BUTTON ===== */
@@ -183,32 +159,25 @@ input:focus, select:focus {
 
 .btn-primary:hover {
     background: #1d4ed8;
-    transform: scale(1.06);
-    box-shadow: 0 10px 30px rgba(30,58,138,0.3);
+    transform: scale(1.05);
 }
 
-/* ===== SECONDARY BUTTON ===== */
+/* ===== SECONDARY ===== */
 
 .btn-secondary {
     padding: 10px 22px;
     border-radius: 10px;
-    background: rgba(226,232,240,0.9);
+    background: rgba(226,232,240,0.7);
     color: #1e293b;
     text-decoration: none;
-    transition: all 0.25s ease;
 }
 
-.btn-secondary:hover {
-    background: #cbd5f5;
-}
-
-/* ===== PROGRESS BAR ===== */
+/* ===== PROGRESS ===== */
 
 .progress-bar {
-    background: rgba(226,232,240,0.9);
+    background: rgba(226,232,240,0.6);
     border-radius: 10px;
     height: 28px;
-    overflow: hidden;
 }
 
 .progress {
@@ -219,26 +188,16 @@ input:focus, select:focus {
     justify-content: center;
     color: white;
     font-weight: 600;
-    animation: growBar 1.2s ease;
-}
-
-@keyframes growBar {
-    from { width: 0; }
 }
 
 /* ===== PLAN BOX ===== */
 
 .plan-box {
-    background: rgba(241,245,249,0.9);
+    background: rgba(241,245,249,0.7);
     padding: 14px;
     border-radius: 10px;
     margin-top: 12px;
     border-left: 4px solid var(--accent);
-    transition: all 0.25s ease;
-}
-
-.plan-box:hover {
-    transform: scale(1.04);
 }
 
 /* ===== SECTION ===== */
@@ -246,13 +205,7 @@ input:focus, select:focus {
 .section-block {
     margin-bottom: 25px;
     padding-bottom: 10px;
-    border-bottom: 1px dashed var(--border);
-}
-
-.section-desc {
-    font-size: 0.9rem;
-    color: #64748b;
-    margin-bottom: 10px;
+    border-bottom: 1px dashed rgba(0,0,0,0.1);
 }
 
 /* ===== CENTER ===== */
