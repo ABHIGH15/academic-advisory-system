@@ -1,9 +1,9 @@
 /* ========================================
-   FINAL ACADEMIC INTELLIGENCE UI
-   Stable • Clean • Animated • Image-based
+   FINAL ACADEMIC INTELLIGENCE UI (ULTIMATE)
+   Balanced • Visible Background • Smooth
 ======================================== */
 
-/* ===== ROOT ===== */
+/* ===== ROOT COLORS ===== */
 
 :root {
     --primary: #1e3a8a;
@@ -13,7 +13,7 @@
     --text: #1e293b;
 }
 
-/* ===== BODY WITH IMAGE BACKGROUND ===== */
+/* ===== BODY WITH VISIBLE IMAGE ===== */
 
 body {
     margin: 0;
@@ -21,12 +21,13 @@ body {
     color: var(--text);
 
     background:
-        linear-gradient(rgba(248,250,252,0.92), rgba(248,250,252,0.96)),
+        linear-gradient(rgba(248,250,252,0.70), rgba(248,250,252,0.75)),
         url("https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1600&q=60");
 
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
+
     overflow-x: hidden;
 }
 
@@ -39,8 +40,8 @@ body::before {
     height: 100%;
 
     background-image:
-        linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+        linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
 
     background-size: 50px 50px;
     z-index: -1;
@@ -62,6 +63,8 @@ body::after {
 
     animation: floatBg 12s infinite alternate ease-in-out;
 }
+
+/* ===== BACKGROUND ANIMATION ===== */
 
 @keyframes floatBg {
     0% { transform: translate(0,0); }
@@ -179,7 +182,7 @@ input:focus, select:focus {
     transform: scale(1.05);
 }
 
-/* ===== SECONDARY ===== */
+/* ===== SECONDARY BUTTON ===== */
 
 .btn-secondary {
     padding: 10px 20px;
@@ -194,7 +197,7 @@ input:focus, select:focus {
     background: #cbd5f5;
 }
 
-/* ===== PROGRESS ===== */
+/* ===== PROGRESS BAR ===== */
 
 .progress-bar {
     background: #e2e8f0;
