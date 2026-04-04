@@ -1,6 +1,9 @@
 /* ========================================
-   ACADEMIC + AI HYBRID UI (FINAL PRO)
+   ACADEMIC INTELLIGENCE UI (FINAL STABLE)
+   Clean • Fast • Professional • Smooth
 ======================================== */
+
+/* ===== ROOT COLORS ===== */
 
 :root {
     --primary: #1e3a8a;
@@ -22,21 +25,23 @@ body {
     overflow-x: hidden;
 }
 
-/* ===== GRID BACKGROUND ===== */
+/* ===== ACADEMIC GRID BACKGROUND ===== */
 
 body::before {
     content: "";
     position: fixed;
     width: 100%;
     height: 100%;
+
     background-image:
         linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+
     background-size: 40px 40px;
-    z-index: -3;
+    z-index: -2;
 }
 
-/* ===== ACADEMIC IMAGE LAYER (ONLINE) ===== */
+/* ===== SOFT LIGHT EFFECT (NO IMAGE, FAST) ===== */
 
 body::after {
     content: "";
@@ -44,24 +49,18 @@ body::after {
     width: 100%;
     height: 100%;
 
-    background-image: url("https://images.unsplash.com/photo-1523240795612-9a054b0db644"),
-                      url("https://images.unsplash.com/photo-1584697964403-0b9e7a6c2b8f");
+    background: radial-gradient(circle at 20% 20%, rgba(30,58,138,0.08), transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(16,185,129,0.06), transparent 40%);
 
-    background-size: cover, cover;
-    background-position: center, center;
-
-    opacity: 0.05;
-    z-index: -2;
-
-    animation: slowMove 40s infinite linear;
+    z-index: -1;
+    animation: subtleMove 20s infinite alternate ease-in-out;
 }
 
-/* ===== SUBTLE MOTION ===== */
+/* ===== BACKGROUND ANIMATION ===== */
 
-@keyframes slowMove {
-    0% { transform: scale(1) translate(0,0); }
-    50% { transform: scale(1.05) translate(10px, -10px); }
-    100% { transform: scale(1) translate(0,0); }
+@keyframes subtleMove {
+    0% { transform: translate(0,0); }
+    100% { transform: translate(20px, -20px); }
 }
 
 /* ===== CONTAINER ===== */
@@ -81,25 +80,27 @@ body::after {
     font-weight: 700;
     margin-bottom: 15px;
     color: var(--primary);
-    animation: fadeIn 1s ease;
+    animation: fadeIn 0.8s ease;
 }
 
 /* ===== CARD ===== */
 
 .soft-card {
     background: var(--card);
-    border-radius: 16px;
+    border-radius: 14px;
     border: 1px solid var(--border);
     padding: 24px;
     margin-bottom: 20px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-    transition: all 0.3s ease;
-    animation: fadeUp 0.8s ease;
+
+    box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+
+    transition: all 0.25s ease;
+    animation: fadeUp 0.6s ease;
 }
 
 .soft-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    transform: translateY(-4px);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.08);
 }
 
 /* ===== ANIMATIONS ===== */
@@ -107,7 +108,7 @@ body::after {
 @keyframes fadeUp {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(15px);
     }
     to {
         opacity: 1;
@@ -123,7 +124,7 @@ body::after {
 /* ===== HEADINGS ===== */
 
 h2 {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     margin-bottom: 10px;
     color: var(--primary);
 }
@@ -140,7 +141,7 @@ p, li {
 input, select {
     width: 100%;
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 8px;
     border: 1px solid var(--border);
     margin-top: 5px;
     background: white;
@@ -159,12 +160,12 @@ input:focus, select:focus {
     background: var(--primary);
     color: white;
     padding: 14px;
-    border-radius: 10px;
+    border-radius: 8px;
     border: none;
     font-weight: 600;
     cursor: pointer;
     width: 100%;
-    transition: all 0.25s ease;
+    transition: all 0.2s ease;
 }
 
 .btn-primary:hover {
@@ -176,7 +177,7 @@ input:focus, select:focus {
 
 .btn-secondary {
     padding: 10px 20px;
-    border-radius: 10px;
+    border-radius: 8px;
     background: #e2e8f0;
     color: #1e293b;
     text-decoration: none;
@@ -191,8 +192,8 @@ input:focus, select:focus {
 
 .progress-bar {
     background: #e2e8f0;
-    border-radius: 10px;
-    height: 28px;
+    border-radius: 8px;
+    height: 26px;
     overflow: hidden;
 }
 
@@ -216,10 +217,10 @@ input:focus, select:focus {
 .plan-box {
     background: #f1f5f9;
     padding: 12px;
-    border-radius: 10px;
+    border-radius: 8px;
     margin-top: 10px;
     border-left: 4px solid var(--accent);
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
 .plan-box:hover {
