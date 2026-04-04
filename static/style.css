@@ -1,31 +1,36 @@
 /* ========================================
-   ACADEMIC INTELLIGENCE SYSTEM UI (FINAL)
-   Clean • Interactive • Professional • Stable
+   FINAL ACADEMIC INTELLIGENCE UI
+   Stable • Clean • Animated • Image-based
 ======================================== */
 
-/* ===== ROOT COLORS ===== */
+/* ===== ROOT ===== */
 
 :root {
     --primary: #1e3a8a;
-    --secondary: #0f172a;
     --accent: #10b981;
-    --bg: #f8fafc;
     --card: #ffffff;
     --border: #e2e8f0;
     --text: #1e293b;
 }
 
-/* ===== GLOBAL ===== */
+/* ===== BODY WITH IMAGE BACKGROUND ===== */
 
 body {
     margin: 0;
     font-family: 'Inter', sans-serif;
     color: var(--text);
-    background: linear-gradient(135deg, #e0e7ff, #f8fafc);
+
+    background:
+        linear-gradient(rgba(248,250,252,0.92), rgba(248,250,252,0.96)),
+        url("https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1600&q=60");
+
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
     overflow-x: hidden;
 }
 
-/* ===== GRID BACKGROUND (VISIBLE) ===== */
+/* ===== GRID OVERLAY ===== */
 
 body::before {
     content: "";
@@ -38,11 +43,10 @@ body::before {
         linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
 
     background-size: 50px 50px;
-
-    z-index: -2;
+    z-index: -1;
 }
 
-/* ===== MOVING LIGHT BACKGROUND ===== */
+/* ===== FLOATING LIGHT EFFECT ===== */
 
 body::after {
     content: "";
@@ -54,23 +58,15 @@ body::after {
         radial-gradient(circle at 20% 30%, rgba(30,58,138,0.15), transparent 40%),
         radial-gradient(circle at 80% 70%, rgba(16,185,129,0.12), transparent 40%);
 
-    z-index: -1;
+    z-index: -2;
 
     animation: floatBg 12s infinite alternate ease-in-out;
 }
 
-/* ===== BACKGROUND ANIMATION ===== */
-
 @keyframes floatBg {
-    0% {
-        transform: translate(0px, 0px);
-    }
-    50% {
-        transform: translate(40px, -30px);
-    }
-    100% {
-        transform: translate(-20px, 20px);
-    }
+    0% { transform: translate(0,0); }
+    50% { transform: translate(40px,-30px); }
+    100% { transform: translate(-20px,20px); }
 }
 
 /* ===== CONTAINER ===== */
@@ -102,7 +98,7 @@ body::after {
     padding: 24px;
     margin-bottom: 20px;
 
-    box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
 
     transition: all 0.35s ease;
     animation: fadeUp 0.8s ease;
@@ -110,7 +106,7 @@ body::after {
 
 .soft-card:hover {
     transform: translateY(-6px) scale(1.01);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.12);
 }
 
 /* ===== ANIMATIONS ===== */
@@ -161,7 +157,7 @@ input, select {
 input:focus, select:focus {
     border-color: var(--primary);
     outline: none;
-    box-shadow: 0 0 0 2px rgba(30,58,138,0.1);
+    box-shadow: 0 0 0 2px rgba(30,58,138,0.15);
 }
 
 /* ===== BUTTON ===== */
@@ -183,7 +179,7 @@ input:focus, select:focus {
     transform: scale(1.05);
 }
 
-/* ===== SECONDARY BUTTON ===== */
+/* ===== SECONDARY ===== */
 
 .btn-secondary {
     padding: 10px 20px;
@@ -198,7 +194,7 @@ input:focus, select:focus {
     background: #cbd5f5;
 }
 
-/* ===== PROGRESS BAR ===== */
+/* ===== PROGRESS ===== */
 
 .progress-bar {
     background: #e2e8f0;
