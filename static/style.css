@@ -1,9 +1,6 @@
 /* ========================================
-   ACADEMIC INTELLIGENCE SYSTEM UI
-   Clean • Research • Professional
+   ACADEMIC + AI HYBRID UI (FINAL PRO)
 ======================================== */
-
-/* ===== ROOT COLORS ===== */
 
 :root {
     --primary: #1e3a8a;
@@ -20,11 +17,12 @@
 body {
     margin: 0;
     font-family: 'Inter', sans-serif;
-    background: linear-gradient(to bottom, #eef2ff, #f8fafc);
     color: var(--text);
+    background: linear-gradient(to bottom, #eef2ff, #f8fafc);
+    overflow-x: hidden;
 }
 
-/* ===== ACADEMIC GRID BACKGROUND ===== */
+/* ===== GRID BACKGROUND ===== */
 
 body::before {
     content: "";
@@ -35,7 +33,35 @@ body::before {
         linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
     background-size: 40px 40px;
-    z-index: -1;
+    z-index: -3;
+}
+
+/* ===== ACADEMIC IMAGE LAYER (ONLINE) ===== */
+
+body::after {
+    content: "";
+    position: fixed;
+    width: 100%;
+    height: 100%;
+
+    background-image: url("https://images.unsplash.com/photo-1523240795612-9a054b0db644"),
+                      url("https://images.unsplash.com/photo-1584697964403-0b9e7a6c2b8f");
+
+    background-size: cover, cover;
+    background-position: center, center;
+
+    opacity: 0.05;
+    z-index: -2;
+
+    animation: slowMove 40s infinite linear;
+}
+
+/* ===== SUBTLE MOTION ===== */
+
+@keyframes slowMove {
+    0% { transform: scale(1) translate(0,0); }
+    50% { transform: scale(1.05) translate(10px, -10px); }
+    100% { transform: scale(1) translate(0,0); }
 }
 
 /* ===== CONTAINER ===== */
@@ -55,6 +81,7 @@ body::before {
     font-weight: 700;
     margin-bottom: 15px;
     color: var(--primary);
+    animation: fadeIn 1s ease;
 }
 
 /* ===== CARD ===== */
@@ -66,12 +93,31 @@ body::before {
     padding: 24px;
     margin-bottom: 20px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-    transition: all 0.25s ease;
+    transition: all 0.3s ease;
+    animation: fadeUp 0.8s ease;
 }
 
 .soft-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+/* ===== ANIMATIONS ===== */
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 /* ===== HEADINGS ===== */
@@ -98,6 +144,13 @@ input, select {
     border: 1px solid var(--border);
     margin-top: 5px;
     background: white;
+    transition: all 0.2s ease;
+}
+
+input:focus, select:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(30,58,138,0.1);
 }
 
 /* ===== BUTTON ===== */
@@ -111,11 +164,12 @@ input, select {
     font-weight: 600;
     cursor: pointer;
     width: 100%;
-    transition: all 0.2s ease;
+    transition: all 0.25s ease;
 }
 
 .btn-primary:hover {
     background: #1d4ed8;
+    transform: scale(1.02);
 }
 
 /* ===== SECONDARY ===== */
@@ -126,6 +180,7 @@ input, select {
     background: #e2e8f0;
     color: #1e293b;
     text-decoration: none;
+    transition: all 0.2s ease;
 }
 
 .btn-secondary:hover {
@@ -149,6 +204,11 @@ input, select {
     justify-content: center;
     color: white;
     font-weight: 600;
+    animation: growBar 1s ease;
+}
+
+@keyframes growBar {
+    from { width: 0; }
 }
 
 /* ===== PLAN BOX ===== */
@@ -159,23 +219,20 @@ input, select {
     border-radius: 10px;
     margin-top: 10px;
     border-left: 4px solid var(--accent);
+    transition: all 0.3s ease;
 }
 
-/* ===== INPUT GROUP ===== */
-
-.input-group {
-    margin-bottom: 15px;
+.plan-box:hover {
+    transform: scale(1.02);
 }
 
-/* ===== SECTION BLOCK ===== */
+/* ===== SECTION ===== */
 
 .section-block {
     margin-bottom: 25px;
     padding-bottom: 10px;
     border-bottom: 1px dashed var(--border);
 }
-
-/* ===== SECTION DESC ===== */
 
 .section-desc {
     font-size: 0.9rem;
