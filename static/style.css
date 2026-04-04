@@ -1,6 +1,6 @@
 /* ========================================
-   FINAL ACADEMIC INTELLIGENCE UI (ULTIMATE)
-   Balanced • Visible Background • Smooth
+   PREMIUM ACADEMIC INTELLIGENCE UI
+   FINAL • PRODUCTION • UNIQUE • VIBRANT
 ======================================== */
 
 /* ===== ROOT COLORS ===== */
@@ -8,12 +8,12 @@
 :root {
     --primary: #1e3a8a;
     --accent: #10b981;
-    --card: #ffffff;
-    --border: #e2e8f0;
+    --card: rgba(255,255,255,0.92);
+    --border: rgba(0,0,0,0.08);
     --text: #1e293b;
 }
 
-/* ===== BODY WITH VISIBLE IMAGE ===== */
+/* ===== BODY (CUSTOM IMAGE + OVERLAY) ===== */
 
 body {
     margin: 0;
@@ -21,8 +21,8 @@ body {
     color: var(--text);
 
     background:
-        linear-gradient(rgba(248,250,252,0.70), rgba(248,250,252,0.75)),
-        url("https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1600&q=60");
+        linear-gradient(rgba(248,250,252,0.60), rgba(248,250,252,0.65)),
+        url("/static/academic_bg.jpeg");
 
     background-size: cover;
     background-position: center;
@@ -56,20 +56,20 @@ body::after {
     height: 100%;
 
     background:
-        radial-gradient(circle at 20% 30%, rgba(30,58,138,0.15), transparent 40%),
-        radial-gradient(circle at 80% 70%, rgba(16,185,129,0.12), transparent 40%);
+        radial-gradient(circle at 20% 30%, rgba(30,58,138,0.18), transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(16,185,129,0.15), transparent 40%);
 
     z-index: -2;
 
-    animation: floatBg 12s infinite alternate ease-in-out;
+    animation: floatBg 14s infinite alternate ease-in-out;
 }
 
-/* ===== BACKGROUND ANIMATION ===== */
+/* ===== BACKGROUND MOTION ===== */
 
 @keyframes floatBg {
     0% { transform: translate(0,0); }
-    50% { transform: translate(40px,-30px); }
-    100% { transform: translate(-20px,20px); }
+    50% { transform: translate(50px,-40px); }
+    100% { transform: translate(-30px,30px); }
 }
 
 /* ===== CONTAINER ===== */
@@ -85,10 +85,12 @@ body::after {
 
 .soft-title {
     text-align: center;
-    font-size: 2.4rem;
+    font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 15px;
+
     color: var(--primary);
+
     animation: fadeIn 1s ease;
 }
 
@@ -96,20 +98,22 @@ body::after {
 
 .soft-card {
     background: var(--card);
-    border-radius: 14px;
+    border-radius: 16px;
     border: 1px solid var(--border);
-    padding: 24px;
-    margin-bottom: 20px;
+    padding: 26px;
+    margin-bottom: 22px;
 
-    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    backdrop-filter: blur(6px);
+
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
 
     transition: all 0.35s ease;
-    animation: fadeUp 0.8s ease;
+    animation: fadeUp 0.9s ease;
 }
 
 .soft-card:hover {
-    transform: translateY(-6px) scale(1.01);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.15);
 }
 
 /* ===== ANIMATIONS ===== */
@@ -117,7 +121,7 @@ body::after {
 @keyframes fadeUp {
     from {
         opacity: 0;
-        transform: translateY(25px);
+        transform: translateY(30px);
     }
     to {
         opacity: 1;
@@ -133,8 +137,8 @@ body::after {
 /* ===== HEADINGS ===== */
 
 h2 {
-    font-size: 1.25rem;
-    margin-bottom: 10px;
+    font-size: 1.3rem;
+    margin-bottom: 12px;
     color: var(--primary);
 }
 
@@ -149,18 +153,18 @@ p, li {
 
 input, select {
     width: 100%;
-    padding: 10px;
-    border-radius: 8px;
+    padding: 11px;
+    border-radius: 10px;
     border: 1px solid var(--border);
-    margin-top: 5px;
+    margin-top: 6px;
     background: white;
-    transition: all 0.2s ease;
+    transition: all 0.25s ease;
 }
 
 input:focus, select:focus {
     border-color: var(--primary);
     outline: none;
-    box-shadow: 0 0 0 2px rgba(30,58,138,0.15);
+    box-shadow: 0 0 0 3px rgba(30,58,138,0.15);
 }
 
 /* ===== BUTTON ===== */
@@ -168,29 +172,30 @@ input:focus, select:focus {
 .btn-primary {
     background: var(--primary);
     color: white;
-    padding: 14px;
-    border-radius: 8px;
+    padding: 15px;
+    border-radius: 10px;
     border: none;
     font-weight: 600;
     cursor: pointer;
     width: 100%;
-    transition: all 0.25s ease;
+    transition: all 0.3s ease;
 }
 
 .btn-primary:hover {
     background: #1d4ed8;
-    transform: scale(1.05);
+    transform: scale(1.06);
+    box-shadow: 0 10px 30px rgba(30,58,138,0.3);
 }
 
 /* ===== SECONDARY BUTTON ===== */
 
 .btn-secondary {
-    padding: 10px 20px;
-    border-radius: 8px;
-    background: #e2e8f0;
+    padding: 10px 22px;
+    border-radius: 10px;
+    background: rgba(226,232,240,0.9);
     color: #1e293b;
     text-decoration: none;
-    transition: all 0.2s ease;
+    transition: all 0.25s ease;
 }
 
 .btn-secondary:hover {
@@ -200,9 +205,9 @@ input:focus, select:focus {
 /* ===== PROGRESS BAR ===== */
 
 .progress-bar {
-    background: #e2e8f0;
-    border-radius: 8px;
-    height: 26px;
+    background: rgba(226,232,240,0.9);
+    border-radius: 10px;
+    height: 28px;
     overflow: hidden;
 }
 
@@ -214,7 +219,7 @@ input:focus, select:focus {
     justify-content: center;
     color: white;
     font-weight: 600;
-    animation: growBar 1s ease;
+    animation: growBar 1.2s ease;
 }
 
 @keyframes growBar {
@@ -224,16 +229,16 @@ input:focus, select:focus {
 /* ===== PLAN BOX ===== */
 
 .plan-box {
-    background: #f1f5f9;
-    padding: 12px;
-    border-radius: 8px;
-    margin-top: 10px;
+    background: rgba(241,245,249,0.9);
+    padding: 14px;
+    border-radius: 10px;
+    margin-top: 12px;
     border-left: 4px solid var(--accent);
     transition: all 0.25s ease;
 }
 
 .plan-box:hover {
-    transform: scale(1.03);
+    transform: scale(1.04);
 }
 
 /* ===== SECTION ===== */
@@ -254,7 +259,7 @@ input:focus, select:focus {
 
 .center {
     text-align: center;
-    margin-top: 25px;
+    margin-top: 30px;
 }
 
 /* ===== MOBILE ===== */
