@@ -1,18 +1,18 @@
 /* ========================================
-   PREMIUM ACADEMIC AI DESIGN SYSTEM 2026
+   ACADEMIC INTELLIGENCE SYSTEM UI
+   Clean • Research • Professional
 ======================================== */
 
 /* ===== ROOT COLORS ===== */
 
 :root {
-    --primary: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
-    --success: linear-gradient(135deg, #10b981, #34d399);
-    --warning: linear-gradient(135deg, #f59e0b, #fbbf24);
-    --danger: linear-gradient(135deg, #ef4444, #f87171);
-
-    --glass: rgba(255,255,255,0.08);
-    --border: rgba(255,255,255,0.15);
-    --text: rgba(255,255,255,0.95);
+    --primary: #1e3a8a;
+    --secondary: #0f172a;
+    --accent: #10b981;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --border: #e2e8f0;
+    --text: #1e293b;
 }
 
 /* ===== GLOBAL ===== */
@@ -20,57 +20,22 @@
 body {
     margin: 0;
     font-family: 'Inter', sans-serif;
-    color: white;
-    overflow-x: hidden;
+    background: linear-gradient(to bottom, #eef2ff, #f8fafc);
+    color: var(--text);
 }
 
-/* ===== ANIMATED BACKGROUND ===== */
+/* ===== ACADEMIC GRID BACKGROUND ===== */
 
-.soft-compute-bg,
-.soft-report-bg {
-    min-height: 100vh;
-    background: linear-gradient(270deg, #6366f1, #8b5cf6, #ec4899);
-    background-size: 600% 600%;
-    animation: gradientMove 12s ease infinite;
-}
-
-@keyframes gradientMove {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-/* ===== FLOATING BLOBS ===== */
-
-.bg-ambient, .bg-ambient2 {
+body::before {
+    content: "";
     position: fixed;
-    filter: blur(120px);
+    width: 100%;
+    height: 100%;
+    background-image:
+        linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
     z-index: -1;
-}
-
-.bg-ambient {
-    width: 600px;
-    height: 600px;
-    background: rgba(99,102,241,0.25);
-    top: 10%;
-    left: -100px;
-    animation: float1 12s infinite alternate ease-in-out;
-}
-
-.bg-ambient2 {
-    width: 500px;
-    height: 500px;
-    background: rgba(236,72,153,0.25);
-    bottom: 0;
-    right: -100px;
-    animation: float2 14s infinite alternate ease-in-out;
-}
-
-@keyframes float1 {
-    to { transform: translateY(80px); }
-}
-@keyframes float2 {
-    to { transform: translateY(-60px); }
 }
 
 /* ===== CONTAINER ===== */
@@ -86,167 +51,147 @@ body {
 
 .soft-title {
     text-align: center;
-    font-size: 2.8rem;
-    font-weight: 800;
-    margin-bottom: 20px;
-    background: linear-gradient(90deg, #fff, #d1d5db);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: var(--primary);
 }
 
-/* ===== GLASS CARD ===== */
+/* ===== CARD ===== */
 
 .soft-card {
-    background: var(--glass);
-    backdrop-filter: blur(25px);
-    border-radius: 28px;
+    background: var(--card);
+    border-radius: 16px;
     border: 1px solid var(--border);
-    padding: 28px;
-    margin-bottom: 25px;
-    box-shadow:
-        0 25px 50px rgba(0,0,0,0.3),
-        inset 0 1px 0 rgba(255,255,255,0.2);
-    transition: all 0.35s ease;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    transition: all 0.25s ease;
 }
 
 .soft-card:hover {
-    transform: translateY(-8px) scale(1.01);
-    box-shadow:
-        0 40px 100px rgba(0,0,0,0.4),
-        0 0 40px rgba(99,102,241,0.25);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
 }
 
 /* ===== HEADINGS ===== */
 
 h2 {
-    margin-bottom: 15px;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    color: var(--primary);
 }
 
 /* ===== TEXT ===== */
 
 p, li {
-    color: var(--text);
     line-height: 1.6;
+    color: #334155;
 }
 
 /* ===== INPUT ===== */
 
 input, select {
     width: 100%;
-    padding: 12px;
-    border-radius: 12px;
-    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
     margin-top: 5px;
-    font-size: 1rem;
+    background: white;
 }
 
 /* ===== BUTTON ===== */
 
 .btn-primary {
-    background: var(--success);
-    padding: 15px;
-    border-radius: 20px;
+    background: var(--primary);
+    color: white;
+    padding: 14px;
+    border-radius: 10px;
     border: none;
-    font-weight: 700;
+    font-weight: 600;
     cursor: pointer;
     width: 100%;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
 .btn-primary:hover {
-    transform: scale(1.05);
-    box-shadow: 0 15px 50px rgba(16,185,129,0.6);
+    background: #1d4ed8;
 }
 
-/* ===== SECONDARY BUTTON ===== */
+/* ===== SECONDARY ===== */
 
 .btn-secondary {
-    padding: 12px 25px;
-    background: rgba(255,255,255,0.2);
-    border-radius: 20px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    background: #e2e8f0;
+    color: #1e293b;
     text-decoration: none;
-    color: white;
 }
 
 .btn-secondary:hover {
-    background: rgba(255,255,255,0.35);
+    background: #cbd5f5;
 }
 
 /* ===== PROGRESS ===== */
 
 .progress-bar {
-    background: rgba(255,255,255,0.1);
-    border-radius: 20px;
-    height: 40px;
+    background: #e2e8f0;
+    border-radius: 10px;
+    height: 28px;
     overflow: hidden;
 }
 
 .progress {
     height: 100%;
+    background: var(--accent);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
-    background: var(--success);
-    position: relative;
-    overflow: hidden;
-}
-
-.progress::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -50%;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.4), transparent);
-    animation: shimmer 2.5s infinite;
-}
-
-@keyframes shimmer {
-    100% { left: 150%; }
+    color: white;
+    font-weight: 600;
 }
 
 /* ===== PLAN BOX ===== */
 
 .plan-box {
-    background: rgba(255,255,255,0.06);
-    padding: 16px;
-    border-radius: 18px;
-    margin-top: 12px;
-    border-left: 4px solid #10b981;
-    transition: all 0.3s ease;
+    background: #f1f5f9;
+    padding: 12px;
+    border-radius: 10px;
+    margin-top: 10px;
+    border-left: 4px solid var(--accent);
 }
 
-.plan-box:hover {
-    background: rgba(255,255,255,0.1);
-}
-
-/* ===== FORM GROUP ===== */
+/* ===== INPUT GROUP ===== */
 
 .input-group {
-    margin-bottom: 18px;
+    margin-bottom: 15px;
+}
+
+/* ===== SECTION BLOCK ===== */
+
+.section-block {
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed var(--border);
+}
+
+/* ===== SECTION DESC ===== */
+
+.section-desc {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 10px;
 }
 
 /* ===== CENTER ===== */
 
 .center {
     text-align: center;
-    margin-top: 30px;
-}
-
-/* ===== SMOOTH SCROLL ===== */
-
-html {
-    scroll-behavior: smooth;
+    margin-top: 25px;
 }
 
 /* ===== MOBILE ===== */
 
 @media (max-width: 768px) {
-    .soft-title { font-size: 2.2rem; }
-    .soft-card { padding: 22px; }
+    .soft-title { font-size: 2rem; }
 }
